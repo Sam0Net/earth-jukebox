@@ -14,15 +14,15 @@ var dom = {}
 
 var trackMetadata = {
   fires: {
-    badge: 'Acid House - 128 BPM',
+    badge: 'Incendios - Sonido Rapido',
     color: '#ff4422'
   },
   met: {
-    badge: 'Afro Deep House - 116 BPM',
+    badge: 'Metano - Sonido Medio',
     color: '#00e676'
   },
   ocean: {
-    badge: 'Progressive House - 122 BPM',
+    badge: 'Oceano - Sonido Suave',
     color: '#00d4ff'
   }
 }
@@ -179,7 +179,7 @@ function setupUIEventListeners() {
     state.activeTrack = 'custom'
     state.customVideoName = file.name
 
-    dom.genreBadge.textContent = 'Video Personalizado - 124 BPM'
+    dom.genreBadge.textContent = 'Video Personalizado'
     dom.genreBadge.style.color = '#bd93f9'
     dom.genreBadge.style.borderColor = '#bd93f9'
     dom.progressBar.style.background = 'linear-gradient(90deg, #bd93f9, #8be9fd)'

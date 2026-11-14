@@ -25,7 +25,7 @@ class HouseAudioEngine {
 
     this.scales = {
       fires: ['C2', 'Eb2', 'F2', 'G2', 'Bb2', 'C3', 'Eb3', 'G3', 'Bb3', 'C4'],
-      met:   ['F3', 'G3', 'A3', 'C4', 'D4', 'F4', 'G4', 'A4', 'C5', 'D5'],
+      met: ['F3', 'G3', 'A3', 'C4', 'D4', 'F4', 'G4', 'A4', 'C5', 'D5'],
       ocean: ['D3', 'E3', 'F3', 'A3', 'C4', 'D4', 'E4', 'A4', 'C5', 'E5']
     }
   }
@@ -34,7 +34,6 @@ class HouseAudioEngine {
     if (this.isInitialized) return
 
     await Tone.start()
-    console.log('audio iniciado')
 
     this.masterCompressor = new Tone.Compressor({
       threshold: -12,
@@ -89,7 +88,14 @@ class HouseAudioEngine {
       oscillator: { type: 'sawtooth' },
       filter: { Q: 7, type: 'lowpass', rolloff: -24 },
       envelope: { attack: 0.01, decay: 0.18, sustain: 0.2, release: 0.15 },
-      filterEnvelope: { attack: 0.01, decay: 0.22, sustain: 0.1, release: 0.2, baseFrequency: 70, octaves: 4 }
+      filterEnvelope: {
+        attack: 0.01,
+        decay: 0.22,
+        sustain: 0.1,
+        release: 0.2,
+        baseFrequency: 70,
+        octaves: 4
+      }
     }).connect(this.masterFilter)
 
     this.marimbaSynth = new Tone.PolySynth(Tone.Synth, {
@@ -112,17 +118,17 @@ class HouseAudioEngine {
 
   setMute(muted) {
     this.isMuted = muted
-    Tone.Destination.mute = this.isMuted
+    Tone.getDestination().mute = muted
   }
 
   configureTrack(trackType) {
-    if (trackType == 'fires') {
+    if (trackType === 'fires') {
       this.currentBpm = 128
       this.kickDrum.volume.value = 3
       this.hiHat.volume.value = -7
       this.clap.volume.value = -6
       this.acidSynth.volume.value = -2
-    } else if (trackType == 'met') {
+    } else if (trackType === 'met') {
       this.currentBpm = 116
       this.kickDrum.volume.value = 0
       this.hiHat.volume.value = -10
@@ -141,16 +147,20 @@ class HouseAudioEngine {
   processPulse(frameData, trackType) {
     if (!this.isInitialized || this.isMuted || !frameData) return
 
-    var now = Tone.now()
-    var currentScale = this.scales[trackType]
-    if (!currentScale) currentScale = this.scales.fires
+    const now = Tone.now()
+    const currentScale = this.scales[trackType] || this.scales.fires
 
-    var lum = frameData.luminance
-    var cutoff = 350 + (lum * 22)
-    if (cutoff > 7000) cutoff = 7000
+    const lum = Number(frameData.luminance) || 0
+    const r = Number(frameData.r) || 0
+    const g = Number(frameData.g) || 0
+    const b = Number(frameData.b) || 0
+
+    const cutoff = Math.min(350 + lum * 22, 7000)
     this.masterFilter.frequency.rampTo(cutoff, 0.06)
 
-    if (trackType == 'fires') {
+    const maxIndex = currentScale.length - 1
+
+    if (trackType === 'fires') {
       if (this.stepCounter % 4 === 0) {
         this.kickDrum.triggerAttackRelease('C1', '8n', now, 1.0)
       }
@@ -158,31 +168,28 @@ class HouseAudioEngine {
         this.clap.triggerAttackRelease('16n', now, 0.9)
       }
       if (this.stepCounter % 2 === 1) {
-        this.hiHat.triggerAttackRelease('32n', now, 0.5 + (frameData.r / 400))
+        this.hiHat.triggerAttackRelease('32n', now, Math.min(0.5 + r / 400, 1))
       }
-      var rIndex = Math.floor((frameData.r / 255) * (currentScale.length - 1))
-      var acidNote = currentScale[rIndex]
-      var acidDuration = (this.stepCounter % 4 === 2) ? '8n' : '16n'
-      this.acidSynth.triggerAttackRelease(acidNote, acidDuration, now, 0.7 + (lum / 500))
-
-    } else if (trackType == 'met') {
+      const rIndex = Math.min(Math.floor((r / 255) * maxIndex), maxIndex)
+      const acidNote = currentScale[rIndex]
+      const acidDuration = this.stepCounter % 4 === 2 ? '8n' : '16n'
+      this.acidSynth.triggerAttackRelease(acidNote, acidDuration, now, Math.min(0.7 + lum / 500, 1))
+    } else if (trackType === 'met') {
       if (this.stepCounter % 8 === 0 || this.stepCounter % 16 === 10) {
         this.kickDrum.triggerAttackRelease('F1', '8n', now, 0.85)
       }
       if (this.stepCounter % 4 === 1 || this.stepCounter % 8 === 6) {
-        var bongoPitch = 'G2'
-        if (this.stepCounter % 2 === 0) bongoPitch = 'C3'
+        const bongoPitch = this.stepCounter % 2 === 0 ? 'C3' : 'G2'
         this.bongoPerc.triggerAttackRelease(bongoPitch, '16n', now, 0.75)
       }
       if (this.stepCounter % 2 === 1) {
         this.hiHat.triggerAttackRelease('32n', now, 0.4)
       }
-      var gIndex = Math.floor((frameData.g / 255) * (currentScale.length - 1))
-      var marimbaNote = currentScale[gIndex]
+      const gIndex = Math.min(Math.floor((g / 255) * maxIndex), maxIndex)
+      const marimbaNote = currentScale[gIndex]
       if (this.stepCounter % 2 === 0 || lum > 80) {
-        this.marimbaSynth.triggerAttackRelease(marimbaNote, '8n', now + 0.04, 0.6 + (lum / 400))
+        this.marimbaSynth.triggerAttackRelease(marimbaNote, '8n', now + 0.04, Math.min(0.6 + lum / 400, 1))
       }
-
     } else {
       if (this.stepCounter % 4 === 0) {
         this.kickDrum.triggerAttackRelease('D1', '8n', now, 0.9)
@@ -196,9 +203,9 @@ class HouseAudioEngine {
       if (this.stepCounter % 16 === 0) {
         this.oceanPad.triggerAttackRelease(['D3', 'A3', 'F4'], '1n', now, 0.5)
       }
-      var bIndex = Math.floor((frameData.b / 255) * (currentScale.length - 1))
-      var crystalNote = currentScale[bIndex]
-      this.crystalArp.triggerAttackRelease(crystalNote, '8n', now + 0.02, 0.5 + (lum / 450))
+      const bIndex = Math.min(Math.floor((b / 255) * maxIndex), maxIndex)
+      const crystalNote = currentScale[bIndex]
+      this.crystalArp.triggerAttackRelease(crystalNote, '8n', now + 0.02, Math.min(0.5 + lum / 450, 1))
     }
 
     this.stepCounter++
@@ -210,11 +217,11 @@ class HouseAudioEngine {
     this.stepCounter = 0
     this.isPlaying = true
 
-    var stepIntervalMs = (60 / this.currentBpm / 2) * 1000
+    const stepIntervalMs = (60 / this.currentBpm / 2) * 1000
 
     this.clockInterval = setInterval(() => {
       if (!this.isPlaying) return
-      var frameData = getCurrentFrameData()
+      const frameData = getCurrentFrameData()
       this.processPulse(frameData, trackType)
     }, stepIntervalMs)
   }
