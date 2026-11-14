@@ -11,7 +11,7 @@ class VideoScanner {
 
     this.videoPaths = {
       fires: 'assets/videos/fires.mp4',
-      met: 'assets/videos/met.mp4',
+      met: 'assets/videos/wet.mp4',
       ocean: 'assets/videos/ocean.mp4'
     }
   }
