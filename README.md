@@ -36,7 +36,7 @@ earth-jukebox/
 └── assets/
     └── videos/
         ├── fires.mp4     <- video NASA de incendios forestales (no incluido en el repo)
-        ├── met.mp4       <- video NASA de emisiones de metano (no incluido en el repo)
+        ├── wet.mp4       <- video NASA de emisiones de metano (no incluido en el repo)
         └── ocean.mp4     <- video NASA de temperatura oceanica (no incluido en el repo)
 ```
 
@@ -61,7 +61,7 @@ Descargar los videos de la NASA y colocarlos en la carpeta `assets/videos/` con 
 | Archivo | Fenómeno | Título original | Descarga |
 |---------|----------|-----------------|----------|
 | `fires.mp4` | Incendios activos | Active Fires As Observed by VIIRS, 2024-Present | [fires_frp_VIIRS_eq_nl_2048p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/fires_frp_VIIRS_eq_nl_2048p30.mp4) |
-| `met.mp4` | Emisiones de metano en humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
+| `wet.mp4` | Emisiones de metano en humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
 | `ocean.mp4` | Temperatura oceánica | Global Sea Surface Currents and Temperature | [ecco2_sst_flow.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/ecco2_sst_flow.mp4) |
 
 Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `met.mp4` y `ocean.mp4`.
@@ -95,5 +95,5 @@ Luego abrir en el navegador: `http://localhost:8080`
 ## Integrantes
 - Sam0Net
 - JLoayz
-- 
+
 NASA Space Apps Challenge 2026
