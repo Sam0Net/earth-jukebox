@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Earth Information Jukebox | NASA Space Apps</title>
+  
+  <!-- Estilos principales con Tema Dracula -->
+  <link rel="stylesheet" href="styles/main.css">
+  
+  <!-- Librerias Externas (CDNs Oficiales) -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/globe.gl@2.32.0/dist/globe.gl.min.js"></script>
+  <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
+</head>
+<body>
+
+  <!-- Contenedor 3D a pantalla completa para el globo terraqueo -->
+  <div id="globeViz"></div>
+
+  <!-- Lienzo (Canvas) oculto para procesamiento de fotogramas de video en memoria -->
+  <canvas id="scannerCanvas" style="display: none;"></canvas>
+
+  <!-- Panel Flotante HUD Dracula de la Rockola Planetaria -->
+  <aside id="jukeboxHUD" class="glass-panel" aria-label="Reproductor Earth Jukebox">
+    
+    <!-- Encabezado del Jukebox -->
+    <header class="hud-header">
+      <div class="hud-top-bar">
+        <div class="hud-badge">NASA Space Apps</div>
+        <div id="genreBadge" class="genre-badge">Acid House - 128 BPM</div>
+      </div>
+      <h1 class="hud-title">Earth Information Jukebox</h1>
+      <p class="hud-subtitle">Sonificacion House de videos satelitales de la NASA</p>
+    </header>
+
+    <!-- Monitor de Video del Planisferio de la NASA -->
+    <section class="hud-section video-section">
+      <div class="video-monitor-wrapper">
+        <video id="nasaVideo" src="assets/videos/fires.mp4" playsinline muted autoplay loop preload="auto"></video>
+        <div class="video-overlay-badge">NASA EIC Planisferio - En Vivo</div>
+        <div id="videoMarker" class="video-coordinate-marker"></div>
+      </div>
+    </section>
+
+    <!-- Selector de Pistas de Video de la NASA y Carga Personalizada -->
+    <section class="hud-section">
+      <label for="trackSelect" class="section-label">Fenomeno Satelital Activo:</label>
+      <div class="custom-select-wrapper">
+        <select id="trackSelect" class="hud-select">
+          <option value="fires" selected>Incendios Forestales (Acid House - 128 BPM)</option>
+          <option value="met">Metano en Humedales (Afro Deep House - 116 BPM)</option>
+          <option value="ocean">Temperatura Oceanica (Progressive House - 122 BPM)</option>
+        </select>
+      </div>
+      
+      <!-- Boton e input para subir video propio -->
+      <div class="upload-wrapper">
+        <input type="file" id="videoFileInput" accept="video/mp4,video/webm" style="display: none;">
+        <button id="uploadBtn" class="upload-btn" type="button">Subir Video Propio (MP4/WebM)</button>
+      </div>
+    </section>
+
+    <!-- Informacion del Punto Seleccionado -->
+    <section class="hud-section info-card">
+      <div class="info-row">
+        <span class="info-label">Coordenadas:</span>
+        <span id="coordsText" class="info-value">Haz clic en el globo</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Estado:</span>
+        <span id="statusText" class="info-value status-idle">Selecciona un punto para iniciar</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Telemetria:</span>
+        <span id="metricsText" class="info-value">RGB: -- | Luz: --</span>
+      </div>
+    </section>
+
+    <!-- Barra de Progreso del Video/Beat -->
+    <section class="hud-section progress-section">
+      <div class="progress-header">
+        <span>Sincronizacion Video / Beat</span>
+        <span id="progressTime">0.0s / 30.0s</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div id="progressBar" class="progress-bar-fill"></div>
+      </div>
+    </section>
+
+    <!-- Controles de Audio y Reproduccion -->
+    <footer class="hud-footer">
+      <button id="playBtn" class="hud-btn primary-btn" disabled>
+        <span class="btn-icon">&#9658;</span>
+        <span class="btn-text">Reproducir Video y Beat</span>
+      </button>
+      <button id="muteBtn" class="hud-btn secondary-btn" title="Silenciar audio">
+        <span class="btn-text" id="muteBtnText">MUTE</span>
+      </button>
+    </footer>
+
+    <!-- Nota pedagogica y cientifica -->
+    <div class="hud-tip">
+      <b>Video a Sonido:</b> El beat de House reacciona en tiempo real al valor espectral del punto seleccionado en cada fotograma del video satelital.
+    </div>
+
+  </aside>
+
+  <!-- Orquestador Principal (Modulo JavaScript) -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

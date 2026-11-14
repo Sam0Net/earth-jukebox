@@ -1,0 +1,18 @@
+# Videos de la NASA (archivos grandes, no van al repo)
+assets/videos/*.mp4
+assets/videos/*.webm
+assets/videos/*.mov
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Variables de entorno
+.env
+.env.local
+
+# Dependencias (si se usan en el futuro)
+node_modules/
