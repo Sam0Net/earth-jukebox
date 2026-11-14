@@ -2,50 +2,73 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>The Earth Information Jukebox | NASA Space Apps</title>
-  
-  <!-- Estilos principales con Tema Dracula -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/main.css">
-  
-  <!-- Librerias Externas (CDNs Oficiales) -->
+
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script src="https://unpkg.com/globe.gl@2.32.0/dist/globe.gl.min.js"></script>
   <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
 </head>
 <body>
 
-  <!-- Contenedor 3D a pantalla completa para el globo terraqueo -->
   <div id="globeViz"></div>
 
-  <!-- Lienzo (Canvas) oculto para procesamiento de fotogramas de video en memoria -->
   <canvas id="scannerCanvas" style="display: none;"></canvas>
 
-  <!-- Panel Flotante HUD Dracula de la Rockola Planetaria -->
+  <svg width="0" height="0" style="position: absolute;" aria-hidden="true" focusable="false">
+    <defs>
+      <g id="vinylArt">
+        <circle cx="100" cy="100" r="98" fill="#14151b" stroke="#6272a4" stroke-width="1.5"/>
+        <g fill="none" stroke="#44475a" stroke-width="0.8">
+          <circle cx="100" cy="100" r="90"/>
+          <circle cx="100" cy="100" r="83"/>
+          <circle cx="100" cy="100" r="76"/>
+          <circle cx="100" cy="100" r="69"/>
+          <circle cx="100" cy="100" r="62"/>
+          <circle cx="100" cy="100" r="55"/>
+          <circle cx="100" cy="100" r="48"/>
+        </g>
+        <g fill="none" stroke="#f8f8f2" stroke-width="5" stroke-linecap="round" opacity="0.16">
+          <path d="M100 14 A86 86 0 0 1 186 100"/>
+          <path d="M100 186 A86 86 0 0 1 14 100"/>
+        </g>
+        <circle cx="100" cy="100" r="34" fill="#bd93f9"/>
+        <circle cx="100" cy="100" r="29" fill="none" stroke="#282a36" stroke-width="0.8" opacity="0.5"/>
+        <circle cx="100" cy="76" r="5" fill="#ff79c6"/>
+        <circle cx="100" cy="100" r="4" fill="#282a36"/>
+      </g>
+    </defs>
+  </svg>
+
+  <div class="vinyl-stage" aria-hidden="true">
+    <svg class="vinyl-disc" viewBox="0 0 200 200"><use href="#vinylArt"/></svg>
+  </div>
+
   <aside id="jukeboxHUD" class="glass-panel" aria-label="Reproductor Earth Jukebox">
-    
-    <!-- Encabezado del Jukebox -->
+
     <header class="hud-header">
       <div class="hud-top-bar">
         <div class="hud-badge">NASA Space Apps</div>
-        <div id="genreBadge" class="genre-badge">Incendios - Sonido Rapido</div>
+        <div id="genreBadge" class="genre-badge">Incendios</div>
       </div>
       <h1 class="hud-title">Earth Information Jukebox</h1>
-      <p class="hud-subtitle">Sonificacion House de videos satelitales de la NASA</p>
+      <p class="hud-subtitle">Escucha como suena la Tierra vista desde el espacio, con datos de la NASA.</p>
     </header>
 
-    <!-- Monitor de Video del Planisferio de la NASA -->
     <section class="hud-section video-section">
       <div class="video-monitor-wrapper">
         <video id="nasaVideo" src="assets/videos/fires.mp4" playsinline muted autoplay loop preload="auto"></video>
-        <div class="video-overlay-badge">NASA EIC Planisferio - En Vivo</div>
         <div id="videoMarker" class="video-coordinate-marker"></div>
       </div>
     </section>
 
-    <!-- Selector de Pistas de Video de la NASA y Carga Personalizada -->
-    <section class="hud-section">
-      <label for="trackSelect" class="section-label">Fenomeno Satelital Activo:</label>
+    <section class="hud-section choice-section">
+      <label for="trackSelect" class="section-label">Que quieres escuchar</label>
       <div class="custom-select-wrapper">
         <select id="trackSelect" class="hud-select">
           <option value="fires" selected>Incendios Forestales</option>
@@ -53,60 +76,37 @@
           <option value="ocean">Temperatura Oceanica</option>
         </select>
       </div>
-      
-      <!-- Boton e input para subir video propio -->
+
       <div class="upload-wrapper">
         <input type="file" id="videoFileInput" accept="video/mp4,video/webm" style="display: none;">
-        <button id="uploadBtn" class="upload-btn" type="button">Subir Video Propio (MP4/WebM)</button>
+        <button id="uploadBtn" class="upload-btn" type="button">Subir tu propio video</button>
       </div>
     </section>
 
-    <!-- Informacion del Punto Seleccionado -->
     <section class="hud-section info-card">
-      <div class="info-row">
-        <span class="info-label">Coordenadas:</span>
-        <span id="coordsText" class="info-value">Haz clic en el globo</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Estado:</span>
-        <span id="statusText" class="info-value status-idle">Selecciona un punto para iniciar</span>
-      </div>
-      <div class="info-row">
-        <span class="info-label">Telemetria:</span>
-        <span id="metricsText" class="info-value">RGB: -- | Luz: --</span>
-      </div>
+      <span id="statusText" class="info-value status-idle">Toca el globo para empezar</span>
     </section>
 
-    <!-- Barra de Progreso del Video/Beat -->
-    <section class="hud-section progress-section">
-      <div class="progress-header">
-        <span>Sincronizacion Video / Beat</span>
-        <span id="progressTime">0.0s / 30.0s</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div id="progressBar" class="progress-bar-fill"></div>
-      </div>
-    </section>
-
-    <!-- Controles de Audio y Reproduccion -->
     <footer class="hud-footer">
       <button id="playBtn" class="hud-btn primary-btn" disabled>
         <span class="btn-icon">&#9658;</span>
-        <span class="btn-text">Reproducir Video y Beat</span>
+        <span class="btn-text">Reproducir</span>
       </button>
       <button id="muteBtn" class="hud-btn secondary-btn" title="Silenciar audio">
-        <span class="btn-text" id="muteBtnText">MUTE</span>
+        <span class="btn-text" id="muteBtnText">Silenciar</span>
       </button>
     </footer>
 
-    <!-- Nota pedagogica y cientifica -->
     <div class="hud-tip">
-      <b>Video a Sonido:</b> El beat de House reacciona en tiempo real al valor espectral del punto seleccionado en cada fotograma del video satelital.
+      Cada lugar del mapa suena distinto, segun lo que muestra el video en ese punto.
+    </div>
+
+    <div class="vinyl-dock" aria-hidden="true">
+      <svg class="vinyl-disc" viewBox="0 0 200 200"><use href="#vinylArt"/></svg>
     </div>
 
   </aside>
 
-  <!-- Orquestador Principal (Modulo JavaScript) -->
   <script type="module" src="js/main.js"></script>
 </body>
 </html>

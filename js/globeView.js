@@ -12,11 +12,11 @@ export function initGlobe(containerId, onLocationSelected) {
   globeInstance = Globe()(container)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
     .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
-    .backgroundImageUrl('https://unpkg.com/three-globe/example/img/night-sky.png')
+    .backgroundColor('rgba(0, 0, 0, 0)')
     .showAtmosphere(true)
-    .atmosphereColor('#bd93f9')
-    .atmosphereAltitude(0.22)
-    .ringColor(() => (t) => `rgba(189, 147, 249, ${Math.max(0, 1 - t)})`)
+    .atmosphereColor('#6272a4')
+    .atmosphereAltitude(0.15)
+    .ringColor(() => (t) => `rgba(139, 233, 253, ${Math.max(0, 1 - t)})`)
     .ringMaxRadius('maxR')
     .ringPropagationSpeed('speed')
     .ringRepeatPeriod('repeat')
@@ -40,8 +40,8 @@ export function initGlobe(containerId, onLocationSelected) {
   globeInstance.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 0)
 
   window.addEventListener('resize', () => {
-    globeInstance.width(window.innerWidth)
-    globeInstance.height(window.innerHeight)
+    globeInstance.width(container.clientWidth)
+    globeInstance.height(container.clientHeight)
   })
 
   return globeInstance
