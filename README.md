@@ -44,15 +44,15 @@ earth-jukebox/
 │   └── i18n.js            <- sistema de internacionalización (inglés por defecto y español)
 └── assets/
     └── videos/
-        ├── fires.mp4            <- video NASA de incendios forestales (no incluido en el repo)
-        ├── wet.mp4              <- video NASA de emisiones de metano por humedales (no incluido en el repo)
-        ├── ocean.mp4            <- video NASA de temperatura oceanica (no incluido en el repo)
-        ├── co2.mp4              <- video NASA de PPM de dioxido de carbono (no incluido en el repo)
-        ├── o3.mp4               <- video NASA de ozono cerca de la superficie (no incluido en el repo)
-        └── precipitation.mp4    <- video NASA de precipitacion y nubes (no incluido en el repo)
+        ├── fires.mp4            <- video NASA de incendios forestales (optimizado web)
+        ├── wet.mp4              <- video NASA de emisiones de metano por humedales (optimizado web)
+        ├── ocean.mp4            <- video NASA de temperatura oceanica (optimizado web)
+        ├── co2.mp4              <- video NASA de PPM de dioxido de carbono (optimizado web)
+        ├── o3.mp4               <- video NASA de ozono cerca de la superficie (optimizado web)
+        └── precipitation.mp4    <- video NASA de precipitacion y nubes (optimizado web)
 ```
 
-> Los archivos `.mp4` no estan incluidos en el repositorio por su tamano. Ver la seccion de instalacion.
+> Los archivos `.mp4` están incluidos directamente en el repositorio en formato optimizado para web (H.264, 1280×640 equirectangular, `<35 MB` cada uno).
 
 ---
 

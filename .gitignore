@@ -1,5 +1,4 @@
-# Videos de la NASA (archivos grandes, no van al repo)
-assets/videos/*.mp4
+# Videos originales de gran tamaño (respaldos locales)
 assets/videos/*.webm
 assets/videos/*.mov
 assets/videos/.backup/
