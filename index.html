@@ -116,16 +116,18 @@
       </svg>
       <span class="top-nav-label">Accesibilidad y navegación rápida</span>
     </button>
+  </div>
 
-    <!-- Panel desplegable de accesibilidad y navegación rápida -->
-    <section id="quickNavA11yPanel" class="quick-nav-panel glass-panel" hidden aria-label="Panel de accesibilidad y navegación rápida">
+  <!-- Ventana centrada de accesibilidad y navegación rápida -->
+  <div id="quickNavA11yOverlay" class="quick-nav-modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="quickNavTitle">
+    <section id="quickNavA11yPanel" class="quick-nav-panel glass-panel" aria-label="Panel de accesibilidad y navegación rápida">
       <div class="panel-header">
         <div class="panel-title-group">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"></circle>
             <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
           </svg>
-          <h2 class="panel-title">Navegación &amp; Accesibilidad</h2>
+          <h2 id="quickNavTitle" class="panel-title">Navegación &amp; Accesibilidad</h2>
         </div>
         <button id="closeQuickNavBtn" class="panel-close-btn" type="button" aria-label="Cerrar panel de accesibilidad">&times;</button>
       </div>
@@ -216,7 +218,7 @@
             <li><kbd>Espacio</kbd> <span>Pausar / Reproducir</span></li>
             <li><kbd>M</kbd> <span>Silenciar / Activar sonido</span></li>
             <li><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd> <span>Capas: Fuego, Metano, Océano</span></li>
-            <li><kbd>Esc</kbd> <span>Cerrar paneles</span></li>
+            <li><kbd>Esc</kbd> <span>Cerrar ventanas</span></li>
           </ul>
         </div>
       </div>
@@ -291,7 +293,7 @@
       </div>
 
       <div class="modal-dialog-footer">
-        <a href="https://www.spaceappschallenge.org/" target="_blank" rel="noopener noreferrer" class="modal-link-btn">
+        <a href="https://www.spaceappschallenge.org/2026/challenges/the-earth-information-jukebox/" target="_blank" rel="noopener noreferrer" class="modal-link-btn">
           Ver reto en Space Apps Challenge <span aria-hidden="true">&nearr;</span>
         </a>
         <button id="closeModalBottomBtn" class="modal-primary-action-btn" type="button">

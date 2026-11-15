@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Elementos de accesibilidad y navegación rápida
   dom.btnAccesibilidad = document.getElementById('quickNavA11yBtn')
+  dom.overlayAccesibilidad = document.getElementById('quickNavA11yOverlay')
   dom.panelAccesibilidad = document.getElementById('quickNavA11yPanel')
   dom.btnCerrarPanel = document.getElementById('closeQuickNavBtn')
   dom.btnAlternarRotacion = document.getElementById('toggleRotationBtn')
@@ -160,18 +161,24 @@ function cerrarModalInfo() {
 }
 
 function alternarPanelAccesibilidad(forzarAbrir) {
-  if (!dom.panelAccesibilidad) return
-  var estaOculto = dom.panelAccesibilidad.hasAttribute('hidden')
+  if (!dom.overlayAccesibilidad) return
+  var estaOculto = dom.overlayAccesibilidad.hasAttribute('hidden')
   var debeAbrir = typeof forzarAbrir === 'boolean' ? forzarAbrir : estaOculto
 
   if (debeAbrir) {
-    dom.panelAccesibilidad.removeAttribute('hidden')
+    dom.overlayAccesibilidad.removeAttribute('hidden')
     dom.btnAccesibilidad.setAttribute('aria-expanded', 'true')
     actualizarTextoBotonRotacion()
-    anunciarAccesibilidad('Panel de accesibilidad y navegación rápida abierto.')
+    anunciarAccesibilidad('Ventana de accesibilidad y navegación rápida abierta en el centro.')
+    if (dom.btnCerrarPanel) {
+      dom.btnCerrarPanel.focus()
+    }
   } else {
-    dom.panelAccesibilidad.setAttribute('hidden', '')
+    dom.overlayAccesibilidad.setAttribute('hidden', '')
     dom.btnAccesibilidad.setAttribute('aria-expanded', 'false')
+    if (dom.btnAccesibilidad) {
+      dom.btnAccesibilidad.focus()
+    }
   }
 }
 
@@ -209,19 +216,17 @@ function configurarEventosAccesibilidadYModal() {
   dom.btnCerrarModalCruz.addEventListener('click', cerrarModalInfo)
   dom.btnCerrarModalAbajo.addEventListener('click', cerrarModalInfo)
 
-  // Cerrar modal al hacer clic en el fondo oscuro
+  // Cerrar modal informativo al hacer clic en el fondo oscuro
   dom.modalInfo.addEventListener('click', (e) => {
     if (e.target === dom.modalInfo) {
       cerrarModalInfo()
     }
   })
 
-  // Cerrar panel de accesibilidad si se hace clic fuera
-  document.addEventListener('click', (e) => {
-    if (dom.panelAccesibilidad && !dom.panelAccesibilidad.hasAttribute('hidden')) {
-      if (!dom.panelAccesibilidad.contains(e.target) && !dom.btnAccesibilidad.contains(e.target)) {
-        alternarPanelAccesibilidad(false)
-      }
+  // Cerrar ventana de accesibilidad al hacer clic en el fondo oscuro centrado
+  dom.overlayAccesibilidad.addEventListener('click', (e) => {
+    if (e.target === dom.overlayAccesibilidad) {
+      alternarPanelAccesibilidad(false)
     }
   })
 
@@ -247,7 +252,7 @@ function configurarEventosAccesibilidadYModal() {
         cerrarModalInfo()
         return
       }
-      if (dom.panelAccesibilidad && !dom.panelAccesibilidad.hasAttribute('hidden')) {
+      if (dom.overlayAccesibilidad && !dom.overlayAccesibilidad.hasAttribute('hidden')) {
         alternarPanelAccesibilidad(false)
         return
       }
