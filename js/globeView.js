@@ -39,9 +39,15 @@ export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
 
   instanciaGlobo.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 0)
 
-  window.addEventListener('resize', () => {
+  function ajustarDimensiones() {
+    if (!instanciaGlobo || !contenedor) return
     instanciaGlobo.width(contenedor.clientWidth)
     instanciaGlobo.height(contenedor.clientHeight)
+  }
+
+  window.addEventListener('resize', ajustarDimensiones)
+  window.addEventListener('orientationchange', () => {
+    setTimeout(ajustarDimensiones, 150)
   })
 
   return instanciaGlobo
