@@ -6,11 +6,7 @@ const colorOnda = (t) => `rgba(139, 233, 253, ${Math.max(0, 1 - t).toFixed(2)})`
 
 export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
   var contenedor = document.getElementById(idContenedor)
-  
-  if (!contenedor) {
-    console.log('no encontre el contenedor')
-    return
-  }
+  if (!contenedor) return
 
   instanciaGlobo = Globe()(contenedor)
     .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg')
@@ -34,7 +30,6 @@ export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
       }
     })
 
-  // Optimización de Three.js Renderer: limitar pixel ratio para mantener 60 FPS estables
   var renderer = instanciaGlobo.renderer()
   if (renderer) {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75))
@@ -49,13 +44,21 @@ export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
 
   instanciaGlobo.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 0)
 
+  let redimensionando = false
   function ajustarDimensiones() {
+    redimensionando = false
     if (!instanciaGlobo || !contenedor) return
     instanciaGlobo.width(contenedor.clientWidth)
     instanciaGlobo.height(contenedor.clientHeight)
   }
 
-  window.addEventListener('resize', ajustarDimensiones)
+  window.addEventListener('resize', () => {
+    if (!redimensionando) {
+      redimensionando = true
+      requestAnimationFrame(ajustarDimensiones)
+    }
+  })
+
   window.addEventListener('orientationchange', () => {
     setTimeout(ajustarDimensiones, 150)
   })

@@ -32,12 +32,16 @@ earth-jukebox/
 │   ├── main.js            <- logica de la interfaz y coordinacion general
 │   ├── globeView.js       <- globo 3D (Globe.gl)
 │   ├── videoScanner.js    <- lectura de pixeles del video (clase EscanerVideo)
-│   └── audioEngine.js     <- sintesis de audio (clase MotorAudioHouse)
+│   ├── audioEngine.js     <- sintesis de audio (clase MotorAudioHouse)
+│   └── i18n.js            <- sistema de internacionalización (inglés por defecto y español)
 └── assets/
     └── videos/
         ├── fires.mp4     <- video NASA de incendios forestales (no incluido en el repo)
         ├── wet.mp4       <- video NASA de emisiones de metano (no incluido en el repo)
-        └── ocean.mp4     <- video NASA de temperatura oceanica (no incluido en el repo)
+        ├── ocean.mp4     <- video NASA de temperatura oceanica (no incluido en el repo)
+        ├── co2.mp4       <- video NASA de dióxido de carbono (no incluido en el repo)
+        ├── o3.mp4        <- video NASA de capa de ozono (no incluido en el repo)
+        └── precipitation.mp4 <- video NASA de precipitación global (no incluido en el repo)
 ```
 
 > Los archivos `.mp4` no estan incluidos en el repositorio por su tamano. Ver la seccion de instalacion.
@@ -63,6 +67,9 @@ Descargar los videos de la NASA y colocarlos en la carpeta `assets/videos/` con 
 | `fires.mp4` | Incendios activos | Active Fires As Observed by VIIRS, 2024-Present | [fires_frp_VIIRS_eq_nl_2048p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/fires_frp_VIIRS_eq_nl_2048p30.mp4) |
 | `wet.mp4` | Emisiones de metano en humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
 | `ocean.mp4` | Temperatura oceánica | Global Sea Surface Currents and Temperature | [ecco2_sst_flow.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/ecco2_sst_flow.mp4) |
+| `co2.mp4` | Dióxido de carbono (CO2) | Global Atmospheric Carbon Dioxide (GEOS Model) | NASA Scientific Visualization Studio |
+| `o3.mp4` | Capa de ozono (O3) | Stratospheric Ozone and Antarctic Ozone Hole | NASA Ozone Watch / OMPS |
+| `precipitation.mp4` | Precipitación global | Global Precipitation Measurement (GPM IMERG) | NASA SVS / GPM Core Observatory |
 
 Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `wet.mp4` y `ocean.mp4`.
 
