@@ -544,6 +544,13 @@ html, body {
   }
 }
 
+@media (max-width: 768px) {
+  .vinyl-stage,
+  .vinyl-dock {
+    display: none !important;
+  }
+}
+
 @media (max-width: 720px) and (orientation: portrait) {
   .hud-collapse-icon {
     transform: rotate(-90deg);
@@ -578,20 +585,9 @@ html, body {
     width: 100%;
   }
 
-  .vinyl-stage {
-    display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
-    height: 92px;
-  }
-
-  .vinyl-stage .vinyl-disc {
-    width: 80px;
-  }
-
+  .vinyl-stage,
   .vinyl-dock {
-    display: none;
+    display: none !important;
   }
 
   #jukeboxHUD {
