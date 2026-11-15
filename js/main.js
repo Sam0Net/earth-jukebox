@@ -434,8 +434,17 @@ function abrirModalInfo() {
   if (!dom.modalInfo) return
   dom.modalInfo.classList.remove('is-hidden')
   dom.modalInfo.setAttribute('aria-hidden', 'false')
-  if (dom.btnCerrarModalAbajo) {
-    dom.btnCerrarModalAbajo.focus()
+
+  // Asegurar que el modal inicie siempre desde la parte superior
+  dom.modalInfo.scrollTop = 0
+  const cardDialog = dom.modalInfo.querySelector('.modal-card-dialog')
+  if (cardDialog) {
+    cardDialog.scrollTop = 0
+  }
+
+  // Enfocar el botón de cerrar superior sin desplazar el contenedor
+  if (dom.btnCerrarModalCruz) {
+    dom.btnCerrarModalCruz.focus({ preventScroll: true })
   }
 }
 

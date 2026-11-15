@@ -40,10 +40,10 @@ export const traducciones = {
     muteTitleUnmute: 'Unmute audio',
     hudTip: 'Every location on the map sounds different, depending on what the video displays at that point.',
 
-    // Top Nav / Accessibility Button
-    navLabelFull: 'Accessibility & Quick Navigation',
+    // Top Nav / Accessibility & Language Buttons
+    navLabelFull: 'Accessibility',
     navLabelShort: 'Accessibility',
-    openA11yLabel: 'Open accessibility and quick navigation',
+    openA11yLabel: 'Open accessibility panel',
 
     // A11y Panel
     a11yPanelAria: 'Accessibility and quick navigation panel',
@@ -79,8 +79,8 @@ export const traducciones = {
     pauseRotation: 'Pause globe rotation',
     resumeRotation: 'Resume globe rotation',
     viewProjectInfo: 'View project information',
-    languageBtnText: 'Cambiar a Español (ES)',
-    languageBtnAria: 'Change language to Spanish',
+    languageBtnText: 'ES',
+    languageBtnAria: 'Switch language to Spanish',
 
     // Keyboard shortcuts
     shortcutsSubtitle: 'Keyboard Shortcuts',
@@ -213,10 +213,10 @@ export const traducciones = {
     muteTitleUnmute: 'Activar sonido',
     hudTip: 'Cada lugar del mapa suena distinto, segun lo que muestra el video en ese punto.',
 
-    // Top Nav / Accessibility Button
-    navLabelFull: 'Accesibilidad y navegación rápida',
+    // Top Nav / Accessibility & Language Buttons
+    navLabelFull: 'Accesibilidad',
     navLabelShort: 'Accesibilidad',
-    openA11yLabel: 'Abrir accesibilidad y navegación rápida',
+    openA11yLabel: 'Abrir panel de accesibilidad',
 
     // A11y Panel
     a11yPanelAria: 'Panel de accesibilidad y navegación rápida',
@@ -252,7 +252,7 @@ export const traducciones = {
     pauseRotation: 'Pausar rotación del globo',
     resumeRotation: 'Reanudar rotación del globo',
     viewProjectInfo: 'Ver información del proyecto',
-    languageBtnText: 'Switch to English (EN)',
+    languageBtnText: 'EN',
     languageBtnAria: 'Cambiar idioma a Inglés',
 
     // Keyboard shortcuts

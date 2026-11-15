@@ -537,6 +537,9 @@ html, body {
   top: max(20px, env(safe-area-inset-top, 20px));
   right: max(20px, env(safe-area-inset-right, 20px));
   z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .top-nav-btn {
@@ -558,12 +561,25 @@ html, body {
   transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
 }
 
-.nav-label-full {
-  display: inline;
+.lang-toggle-btn {
+  padding: 10px 14px;
+  border-color: rgba(189, 147, 249, 0.4);
 }
 
-.nav-label-short {
-  display: none;
+.lang-toggle-btn:hover {
+  border-color: var(--cyan);
+}
+
+.lang-icon {
+  color: var(--cyan);
+  flex-shrink: 0;
+}
+
+.lang-code {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  font-size: 0.88rem;
+  color: var(--text);
 }
 
 .top-nav-btn:hover {
@@ -821,9 +837,9 @@ kbd {
   inset: 0;
   z-index: 1000;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: max(16px, env(safe-area-inset-top, 16px)) max(16px, env(safe-area-inset-right, 16px)) max(16px, env(safe-area-inset-bottom, 16px)) max(16px, env(safe-area-inset-left, 16px));
+  padding: max(28px, env(safe-area-inset-top, 28px)) max(16px, env(safe-area-inset-right, 16px)) max(28px, env(safe-area-inset-bottom, 28px)) max(16px, env(safe-area-inset-left, 16px));
   background: rgba(33, 34, 44, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -843,7 +859,8 @@ kbd {
   position: relative;
   width: 100%;
   max-width: 680px;
-  max-height: min(780px, calc(100dvh - 32px));
+  max-height: min(780px, calc(100dvh - 56px));
+  margin: 0 auto;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   background: var(--panel);
@@ -1201,12 +1218,9 @@ kbd {
 }
 
 @media (max-width: 580px) {
-  .nav-label-full {
-    display: none;
-  }
-
-  .nav-label-short {
-    display: inline;
+  .top-nav-btn {
+    padding: 8px 12px;
+    font-size: 0.82rem;
   }
 }
 
@@ -1220,14 +1234,6 @@ kbd {
     min-height: 38px;
     padding: 6px 12px;
     font-size: 0.82rem;
-  }
-
-  .nav-label-full {
-    display: none;
-  }
-
-  .nav-label-short {
-    display: inline;
   }
 
   .modal-overlay,
