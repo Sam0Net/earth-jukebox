@@ -39,9 +39,15 @@ export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
 
   instanciaGlobo.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 0)
 
-  window.addEventListener('resize', () => {
+  function ajustarDimensiones() {
+    if (!instanciaGlobo || !contenedor) return
     instanciaGlobo.width(contenedor.clientWidth)
     instanciaGlobo.height(contenedor.clientHeight)
+  }
+
+  window.addEventListener('resize', ajustarDimensiones)
+  window.addEventListener('orientationchange', () => {
+    setTimeout(ajustarDimensiones, 150)
   })
 
   return instanciaGlobo
@@ -70,4 +76,20 @@ export function dispararOnda(lat, lng) {
 export function enfocarUbicacion(lat, lng, altitud = 1.8) {
   if (!instanciaGlobo) return
   instanciaGlobo.pointOfView({ lat, lng, altitude: altitud }, 1200)
+}
+
+export function alternarRotacionGlobo(forzarEstado) {
+  if (!instanciaGlobo) return false
+  var controles = instanciaGlobo.controls()
+  if (typeof forzarEstado === 'boolean') {
+    controles.autoRotate = forzarEstado
+  } else {
+    controles.autoRotate = !controles.autoRotate
+  }
+  return controles.autoRotate
+}
+
+export function obtenerRotacionGlobo() {
+  if (!instanciaGlobo) return false
+  return !!instanciaGlobo.controls().autoRotate
 }
