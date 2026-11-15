@@ -64,6 +64,14 @@ html, body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   scrollbar-width: thin;
   scrollbar-color: var(--line) transparent;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, visibility 0.35s;
+}
+
+#jukeboxHUD.is-collapsed {
+  transform: translateX(calc(-100% - 30px));
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .hud-top-bar {
@@ -72,6 +80,107 @@ html, body {
   justify-content: space-between;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+.hud-top-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hud-collapse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: rgba(40, 42, 54, 0.65);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.hud-collapse-btn:hover {
+  background: var(--current);
+  border-color: var(--cyan);
+  color: var(--cyan);
+  box-shadow: 0 0 10px rgba(139, 233, 253, 0.25);
+}
+
+.hud-collapse-btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.hud-collapse-icon {
+  transition: transform 0.25s ease;
+}
+
+.hud-floating-toggle-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 85;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  min-height: 44px;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  background: rgba(40, 42, 54, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: hudBtnFadeIn 0.3s ease-out;
+}
+
+.hud-floating-toggle-btn[hidden] {
+  display: none !important;
+}
+
+.hud-floating-toggle-btn:hover {
+  background: var(--current);
+  border-color: var(--pink);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(255, 121, 198, 0.3);
+}
+
+.hud-floating-toggle-btn:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+.hud-floating-toggle-btn svg {
+  color: var(--cyan);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.hud-floating-toggle-btn:hover svg {
+  color: var(--pink);
+}
+
+@keyframes hudBtnFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .hud-badge {
@@ -427,9 +536,33 @@ html, body {
   .vinyl-disc {
     animation: none;
   }
+
+  .glass-panel,
+  .hud-floating-toggle-btn {
+    transition: none !important;
+    animation: none !important;
+  }
 }
 
 @media (max-width: 720px) and (orientation: portrait) {
+  .hud-collapse-icon {
+    transform: rotate(-90deg);
+  }
+
+  .hud-floating-toggle-btn {
+    top: auto;
+    bottom: max(16px, env(safe-area-inset-bottom, 16px));
+    left: max(16px, env(safe-area-inset-left, 16px));
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  body.hud-collapsed .vinyl-stage {
+    display: none;
+  }
+
+  #jukeboxHUD.is-collapsed {
+    display: none;
+  }
   body {
     display: flex;
     flex-direction: column;
@@ -549,6 +682,14 @@ html, body {
 }
 
 @media (max-height: 550px) and (orientation: landscape) {
+  .hud-floating-toggle-btn {
+    top: max(10px, env(safe-area-inset-top, 10px));
+    left: max(10px, env(safe-area-inset-left, 10px));
+    min-height: 38px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+  }
+
   #jukeboxHUD {
     top: max(10px, env(safe-area-inset-top, 10px));
     left: max(10px, env(safe-area-inset-left, 10px));

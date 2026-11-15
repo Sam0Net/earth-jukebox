@@ -2,7 +2,7 @@
 
 <p align="center">
   <em>"At least 2.2 billion people have a near or distance vision impairment"</em><br>
-  — <strong>World Health Organization (WHO), 2026</strong>
+  - <strong>World Health Organization (WHO), 2026</strong>
 </p>
 
 <p align="center">
@@ -16,7 +16,7 @@
 
 **The Earth Information Jukebox** transforms NASA satellite visualizations into dynamic, real-time House music soundscapes. By interacting with an interactive 3D globe, users can sample coordinate pixels directly from NASA Earth Information Center (EIC) data streams. The system analyzes pixel brightness, RGB balance, and chromatic density in real time, mapping visual Earth science into evolving electronic music subgenres.
 
-Our mission is to make complex Earth science **accessible, multi-sensory, and engaging** for everyone—especially blind and low-vision individuals—by converting vital environmental visual data into intuitive, emotive, and pleasant auditory experiences.
+Our mission is to make complex Earth science **accessible, multi-sensory, and engaging** for everyone (especially blind and low-vision individuals) by converting vital environmental visual data into intuitive, emotive, and pleasant auditory experiences.
 
 ---
 
@@ -182,5 +182,5 @@ Developed for the **NASA Space Apps Challenge 2026**:
 ---
 
 <p align="center">
-  <strong>NASA Space Apps Challenge 2026 — The Earth Information Jukebox 🌎✨</strong>
+  <strong>NASA Space Apps Challenge 2026 - The Earth Information Jukebox 🌎✨</strong>
 </p>

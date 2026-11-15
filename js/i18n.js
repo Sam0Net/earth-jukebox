@@ -39,6 +39,10 @@ export const traducciones = {
     muteTitleMute: 'Mute audio',
     muteTitleUnmute: 'Unmute audio',
     hudTip: 'Every location on the map sounds different, depending on what the video displays at that point.',
+    collapseHudLabel: 'Hide controls panel',
+    collapseHudTitle: 'Hide controls panel (H)',
+    expandHudLabel: 'Show controls panel',
+    showControls: 'Controls',
 
     // Top Nav / Accessibility & Language Buttons
     navLabelFull: 'Accessibility',
@@ -87,6 +91,7 @@ export const traducciones = {
     shortcutSpace: 'Pause / Play',
     shortcutM: 'Mute / Unmute audio',
     shortcutG: 'Automatic guided exploration',
+    shortcutH: 'Hide / Show controls panel',
     shortcut16: 'Layers: Fire, Methane, Ocean, CO2, O3, Rain',
     shortcutEsc: 'Close dialogs',
 
@@ -129,6 +134,8 @@ export const traducciones = {
     a11yRotationOn: 'Globe rotation activated.',
     a11yRotationOff: 'Globe rotation paused.',
     a11yLangSwitched: 'Language switched to English.',
+    a11yHudCollapsed: 'Controls panel hidden. Press H or activate the Controls button to show it again.',
+    a11yHudExpanded: 'Controls panel displayed.',
 
     // Telemetry Hemispheres & Metrics
     hemiWest: 'Western Hemisphere (Left)',
@@ -212,6 +219,10 @@ export const traducciones = {
     muteTitleMute: 'Silenciar audio',
     muteTitleUnmute: 'Activar sonido',
     hudTip: 'Cada lugar del mapa suena distinto, segun lo que muestra el video en ese punto.',
+    collapseHudLabel: 'Ocultar panel de controles',
+    collapseHudTitle: 'Ocultar panel de controles (H)',
+    expandHudLabel: 'Mostrar panel de controles',
+    showControls: 'Controles',
 
     // Top Nav / Accessibility & Language Buttons
     navLabelFull: 'Accesibilidad',
@@ -260,6 +271,7 @@ export const traducciones = {
     shortcutSpace: 'Pausar / Reproducir',
     shortcutM: 'Silenciar / Activar sonido',
     shortcutG: 'Exploración guiada automática',
+    shortcutH: 'Ocultar / Mostrar panel de controles',
     shortcut16: 'Capas: Fuego, Metano, Océano, CO2, O3, Lluvia',
     shortcutEsc: 'Cerrar ventanas',
 
@@ -302,6 +314,8 @@ export const traducciones = {
     a11yRotationOn: 'Rotación del globo activada.',
     a11yRotationOff: 'Rotación del globo pausada.',
     a11yLangSwitched: 'Idioma cambiado a Español.',
+    a11yHudCollapsed: 'Panel de controles oculto. Presiona H o activa el botón Controles para mostrarlo nuevamente.',
+    a11yHudExpanded: 'Panel de controles mostrado.',
 
     // Telemetry Hemispheres & Metrics
     hemiWest: 'Hemisferio Occidental (Izq.)',

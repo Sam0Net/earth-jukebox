@@ -122,6 +122,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   dom.btnCerrarModalAbajo = document.getElementById('closeModalBottomBtn')
   dom.anunciadorA11y = document.getElementById('a11yAnnouncer')
 
+  dom.panelHUD = document.getElementById('jukeboxHUD')
+  dom.btnOcultarHUD = document.getElementById('collapseHudBtn')
+  dom.btnMostrarHUD = document.getElementById('expandHudBtn')
+
   suscribirCambioIdioma(() => {
     sincronizarUIPorIdioma()
   })
@@ -501,6 +505,46 @@ function actualizarTextoBotonRotacion() {
   dom.textoBtnRotacion.textContent = rotando ? t('pauseRotation') : t('resumeRotation')
 }
 
+function alternarHUD(forzarColapsar) {
+  var hud = dom.panelHUD || document.getElementById('jukeboxHUD')
+  var btnMostrar = dom.btnMostrarHUD || document.getElementById('expandHudBtn')
+  var btnOcultar = dom.btnOcultarHUD || document.getElementById('collapseHudBtn')
+
+  if (!hud) return
+
+  var colapsar = typeof forzarColapsar === 'boolean'
+    ? forzarColapsar
+    : !hud.classList.contains('is-collapsed')
+
+  if (colapsar) {
+    hud.classList.add('is-collapsed')
+    hud.setAttribute('aria-hidden', 'true')
+    document.body.classList.add('hud-collapsed')
+    if (btnMostrar) {
+      btnMostrar.removeAttribute('hidden')
+      btnMostrar.setAttribute('aria-expanded', 'false')
+      btnMostrar.focus()
+    }
+    anunciarAccesibilidad(t('a11yHudCollapsed'))
+  } else {
+    hud.classList.remove('is-collapsed')
+    hud.removeAttribute('aria-hidden')
+    document.body.classList.remove('hud-collapsed')
+    if (btnMostrar) {
+      btnMostrar.setAttribute('hidden', '')
+      btnMostrar.setAttribute('aria-expanded', 'true')
+    }
+    if (btnOcultar) {
+      btnOcultar.focus()
+    }
+    anunciarAccesibilidad(t('a11yHudExpanded'))
+  }
+
+  setTimeout(() => {
+    window.dispatchEvent(new Event('resize'))
+  }, 100)
+}
+
 function configurarEventosAccesibilidadYModal() {
   if (dom.btnAlternarIdioma) {
     dom.btnAlternarIdioma.addEventListener('click', () => {
@@ -589,6 +633,8 @@ function configurarEventosAccesibilidadYModal() {
       }
     } else if (e.key === 'm' || e.key === 'M') {
       if (dom.btnSilenciar) dom.btnSilenciar.click()
+    } else if (e.key === 'h' || e.key === 'H') {
+      alternarHUD()
     } else if (e.key === 'g' || e.key === 'G') {
       if (estado.exploracionGuiadaActiva) {
         detenerExploracionGuiada(false)
@@ -716,4 +762,12 @@ function configurarEventosUI() {
       alSeleccionarUbicacion(estado.ubicacionSeleccionada.lat, estado.ubicacionSeleccionada.lng)
     }
   })
+
+  if (dom.btnOcultarHUD) {
+    dom.btnOcultarHUD.addEventListener('click', () => alternarHUD(true))
+  }
+
+  if (dom.btnMostrarHUD) {
+    dom.btnMostrarHUD.addEventListener('click', () => alternarHUD(false))
+  }
 }
