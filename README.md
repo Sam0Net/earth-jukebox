@@ -40,7 +40,8 @@ earth-jukebox/
 │   ├── main.js            <- logica de la interfaz y coordinacion general
 │   ├── globeView.js       <- globo 3D (Globe.gl)
 │   ├── videoScanner.js    <- lectura de pixeles del video (clase EscanerVideo)
-│   └── audioEngine.js     <- sintesis de audio (clase MotorAudioHouse)
+│   ├── audioEngine.js     <- sintesis de audio (clase MotorAudioHouse)
+│   └── i18n.js            <- sistema de internacionalización (inglés por defecto y español)
 └── assets/
     └── videos/
         ├── fires.mp4            <- video NASA de incendios forestales (no incluido en el repo)
@@ -74,11 +75,11 @@ Descargar los videos de la NASA y colocarlos en la carpeta `assets/videos/` con 
 | `fires.mp4` | Incendios activos | Active Fires As Observed by VIIRS, 2024-Present | [fires_frp_VIIRS_eq_nl_2048p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/fires_frp_VIIRS_eq_nl_2048p30.mp4) |
 | `wet.mp4` | Emisiones de metano por humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
 | `ocean.mp4` | Temperatura oceánica | Global Sea Surface Currents and Temperature | [ecco2_sst_flow.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/ecco2_sst_flow.mp4) |
-| `co2.mp4` | PPM de dioxido de carbon | DYAMOND Global Carbon Dioxide for Science On A Sphere | [soscomp_1-29-2025a_1024p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005436/soscomp_1-29-2025a_1024p30.mp4) |
-| `o3.mp4` | Ozono cerca de la superficie | Near surface Ozone (O3) | [MC02_stage4_GMAO_O3_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005152/MC02_stage4_GMAO_O3_2048x1024_en.mp4) |
-| `precipitation.mp4` | Precipitacion y nubes | GEOS-FP Precipitation and Clouds | [MC03_stage3_GMAO_precipitation_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005149/MC03_stage3_GMAO_precipitation_2048x1024_en.mp4) |
+| `co2.mp4` | PPM de dióxido de carbono (CO2) | DYAMOND Global Carbon Dioxide for Science On A Sphere | [soscomp_1-29-2025a_1024p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005436/soscomp_1-29-2025a_1024p30.mp4) |
+| `o3.mp4` | Capa de ozono cerca de la superficie (O3) | Near surface Ozone (O3) | [MC02_stage4_GMAO_O3_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005152/MC02_stage4_GMAO_O3_2048x1024_en.mp4) |
+| `precipitation.mp4` | Precipitación global y nubes | GEOS-FP Precipitation and Clouds | [MC03_stage3_GMAO_precipitation_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005149/MC03_stage3_GMAO_precipitation_2048x1024_en.mp4) |
 
-Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `wet.mp4` y `ocean.mp4`.
+Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `wet.mp4`, `ocean.mp4`, `co2.mp4`, `o3.mp4` y `precipitation.mp4`.
 
 > **Tip de optimización:** Si los videos descargados vienen en resolución 4K (como 4096×2048 o con pistas de audio pesadas), se pueden optimizar para máxima fluidez a 60 FPS y menor consumo de memoria con:
 > ```bash
