@@ -1,156 +1,157 @@
-import { initGlobe, triggerRipple } from './globeView.js'
-import { videoScanner } from './videoScanner.js'
-import { audioEngine } from './audioEngine.js'
 
-var state = {
-  selectedLocation: null,
-  activeTrack: 'fires',
-  isPlaying: false,
-  isMuted: false
+import { iniciarGlobo, dispararOnda } from './globeView.js'
+import { escanerVideo } from './videoScanner.js'
+import { motorAudio } from './audioEngine.js'
+ 
+var estado = {
+  ubicacionSeleccionada: null,
+  pistaActiva: 'fires',
+  estaReproduciendo: false,
+  estaSilenciado: false
 }
-
+ 
 var dom = {}
-
-var trackMetadata = {
-  fires: { badge: 'Incendios', color: '#ff5555' },
-  met: { badge: 'Metano', color: '#50fa7b' },
-  ocean: { badge: 'Oceano', color: '#8be9fd' }
+ 
+var metadatosPistas = {
+  fires: { insignia: 'Incendios', color: '#ff5555' },
+  met: { insignia: 'Metano', color: '#50fa7b' },
+  ocean: { insignia: 'Oceano', color: '#8be9fd' }
 }
-
-var latestFrameData = null
-
+ 
+var ultimosDatosFrame = null
+ 
 document.addEventListener('DOMContentLoaded', async () => {
-  dom.statusText = document.getElementById('statusText')
-  dom.playBtn = document.getElementById('playBtn')
-  dom.muteBtn = document.getElementById('muteBtn')
-  dom.muteBtnText = document.getElementById('muteBtnText')
-  dom.trackSelect = document.getElementById('trackSelect')
-  dom.genreBadge = document.getElementById('genreBadge')
-  dom.videoMarker = document.getElementById('videoMarker')
-  dom.uploadBtn = document.getElementById('uploadBtn')
-  dom.videoFileInput = document.getElementById('videoFileInput')
-
-  dom.statusText.textContent = 'Cargando...'
-  await videoScanner.loadVideo(state.activeTrack)
-  dom.statusText.textContent = 'Toca el globo para escuchar ese lugar.'
-
-  initGlobe('globeViz', handleLocationSelected)
-
-  setupUIEventListeners()
+  dom.textoEstado = document.getElementById('statusText')
+  dom.btnReproducir = document.getElementById('playBtn')
+  dom.btnSilenciar = document.getElementById('muteBtn')
+  dom.textoBtnSilenciar = document.getElementById('muteBtnText')
+  dom.selectorPista = document.getElementById('trackSelect')
+  dom.insigniaGenero = document.getElementById('genreBadge')
+  dom.marcadorVideo = document.getElementById('videoMarker')
+  dom.btnSubir = document.getElementById('uploadBtn')
+  dom.entradaArchivoVideo = document.getElementById('videoFileInput')
+ 
+  dom.textoEstado.textContent = 'Cargando...'
+  await escanerVideo.cargarVideo(estado.pistaActiva)
+  dom.textoEstado.textContent = 'Toca el globo para escuchar ese lugar.'
+ 
+  iniciarGlobo('globeViz', alSeleccionarUbicacion)
+ 
+  configurarEventosUI()
 })
-
-async function handleLocationSelected(lat, lng) {
-  state.selectedLocation = { lat, lng }
-
-  var pixel = videoScanner.latLngToPixel(lat, lng)
-  dom.videoMarker.style.left = pixel.percentX + '%'
-  dom.videoMarker.style.top = pixel.percentY + '%'
-  dom.videoMarker.style.display = 'block'
-
-  dom.statusText.textContent = 'Escuchando este lugar.'
-  dom.statusText.className = 'info-value status-playing'
-  dom.playBtn.disabled = false
-  dom.playBtn.innerHTML = '<span class="btn-icon">&#10074;&#10074;</span><span class="btn-text">Pausar</span>'
-
-  await audioEngine.init()
-
-  state.isPlaying = true
+ 
+async function alSeleccionarUbicacion(lat, lng) {
+  estado.ubicacionSeleccionada = { lat, lng }
+ 
+  var pixel = escanerVideo.latLngAPixel(lat, lng)
+  dom.marcadorVideo.style.left = pixel.porcentajeX + '%'
+  dom.marcadorVideo.style.top = pixel.porcentajeY + '%'
+  dom.marcadorVideo.style.display = 'block'
+ 
+  dom.textoEstado.textContent = 'Escuchando este lugar.'
+  dom.textoEstado.className = 'info-value status-playing'
+  dom.btnReproducir.disabled = false
+  dom.btnReproducir.innerHTML = '<span class="btn-icon">&#10074;&#10074;</span><span class="btn-text">Pausar</span>'
+ 
+  await motorAudio.iniciar()
+ 
+  estado.estaReproduciendo = true
   document.body.classList.add('is-playing')
-
-  var trackForAudio = state.activeTrack
-  if (state.activeTrack == 'custom') {
-    trackForAudio = 'fires'
+ 
+  var pistaParaAudio = estado.pistaActiva
+  if (estado.pistaActiva == 'custom') {
+    pistaParaAudio = 'fires'
   }
-
-  videoScanner.startScan(lat, lng, (data) => {
-    latestFrameData = data
+ 
+  escanerVideo.iniciarEscaneo(lat, lng, (datos) => {
+    ultimosDatosFrame = datos
   })
-
-  audioEngine.startPlayback(trackForAudio, () => latestFrameData)
+ 
+  motorAudio.iniciarReproduccion(pistaParaAudio, () => ultimosDatosFrame)
 }
-
+ 
 function detenerReproduccion(mensaje) {
   if (!mensaje) mensaje = 'Pausado.'
-  state.isPlaying = false
+  estado.estaReproduciendo = false
   document.body.classList.remove('is-playing')
-  videoScanner.pauseVideo()
-  audioEngine.stopPlayback()
-  dom.statusText.textContent = mensaje
-  dom.statusText.className = 'info-value status-idle'
-  dom.playBtn.innerHTML = '<span class="btn-icon">&#9658;</span><span class="btn-text">Reproducir</span>'
+  escanerVideo.pausarVideo()
+  motorAudio.detenerReproduccion()
+  dom.textoEstado.textContent = mensaje
+  dom.textoEstado.className = 'info-value status-idle'
+  dom.btnReproducir.innerHTML = '<span class="btn-icon">&#9658;</span><span class="btn-text">Reproducir</span>'
 }
-
-function setupUIEventListeners() {
-  dom.trackSelect.addEventListener('change', async (e) => {
-    state.activeTrack = e.target.value
-    var meta = trackMetadata[state.activeTrack]
-    if (!meta) meta = trackMetadata.fires
-
-    dom.genreBadge.textContent = meta.badge
-    dom.genreBadge.style.color = meta.color
-    dom.genreBadge.style.borderColor = meta.color
-
+ 
+function configurarEventosUI() {
+  dom.selectorPista.addEventListener('change', async (e) => {
+    estado.pistaActiva = e.target.value
+    var meta = metadatosPistas[estado.pistaActiva]
+    if (!meta) meta = metadatosPistas.fires
+ 
+    dom.insigniaGenero.textContent = meta.insignia
+    dom.insigniaGenero.style.color = meta.color
+    dom.insigniaGenero.style.borderColor = meta.color
+ 
     var nombre = e.target.selectedOptions[0].text
-    dom.statusText.textContent = 'Cargando ' + nombre + '...'
-    dom.statusText.className = 'info-value status-idle'
-    await videoScanner.loadVideo(state.activeTrack)
-    dom.statusText.textContent = 'Listo: ' + nombre
-
-    if (state.selectedLocation) {
-      triggerRipple(state.selectedLocation.lat, state.selectedLocation.lng)
-      handleLocationSelected(state.selectedLocation.lat, state.selectedLocation.lng)
+    dom.textoEstado.textContent = 'Cargando ' + nombre + '...'
+    dom.textoEstado.className = 'info-value status-idle'
+    await escanerVideo.cargarVideo(estado.pistaActiva)
+    dom.textoEstado.textContent = 'Listo: ' + nombre
+ 
+    if (estado.ubicacionSeleccionada) {
+      dispararOnda(estado.ubicacionSeleccionada.lat, estado.ubicacionSeleccionada.lng)
+      alSeleccionarUbicacion(estado.ubicacionSeleccionada.lat, estado.ubicacionSeleccionada.lng)
     }
   })
-
-  dom.playBtn.addEventListener('click', () => {
-    if (!state.selectedLocation) return
-    if (state.isPlaying) {
+ 
+  dom.btnReproducir.addEventListener('click', () => {
+    if (!estado.ubicacionSeleccionada) return
+    if (estado.estaReproduciendo) {
       detenerReproduccion('Pausado.')
     } else {
-      triggerRipple(state.selectedLocation.lat, state.selectedLocation.lng)
-      handleLocationSelected(state.selectedLocation.lat, state.selectedLocation.lng)
+      dispararOnda(estado.ubicacionSeleccionada.lat, estado.ubicacionSeleccionada.lng)
+      alSeleccionarUbicacion(estado.ubicacionSeleccionada.lat, estado.ubicacionSeleccionada.lng)
     }
   })
-
-  dom.muteBtn.addEventListener('click', () => {
-    state.isMuted = !state.isMuted
-    audioEngine.setMute(state.isMuted)
-    if (state.isMuted) {
-      dom.muteBtnText.textContent = 'Activar sonido'
+ 
+  dom.btnSilenciar.addEventListener('click', () => {
+    estado.estaSilenciado = !estado.estaSilenciado
+    motorAudio.silenciar(estado.estaSilenciado)
+    if (estado.estaSilenciado) {
+      dom.textoBtnSilenciar.textContent = 'Activar sonido'
     } else {
-      dom.muteBtnText.textContent = 'Silenciar'
+      dom.textoBtnSilenciar.textContent = 'Silenciar'
     }
   })
-
-  dom.uploadBtn.addEventListener('click', () => {
-    dom.videoFileInput.click()
+ 
+  dom.btnSubir.addEventListener('click', () => {
+    dom.entradaArchivoVideo.click()
   })
-
-  dom.videoFileInput.addEventListener('change', async (e) => {
-    var file = e.target.files[0]
-    if (!file) return
-
-    if (state.isPlaying) {
+ 
+  dom.entradaArchivoVideo.addEventListener('change', async (e) => {
+    var archivo = e.target.files[0]
+    if (!archivo) return
+ 
+    if (estado.estaReproduciendo) {
       detenerReproduccion('Cargando tu video...')
     }
-
-    state.activeTrack = 'custom'
-
-    dom.genreBadge.textContent = 'Video propio'
-    dom.genreBadge.style.color = '#bd93f9'
-    dom.genreBadge.style.borderColor = '#bd93f9'
-
-    dom.statusText.textContent = 'Cargando tu video...'
-    dom.statusText.className = 'info-value status-idle'
-
-    await videoScanner.loadUserVideo(file)
-    dom.statusText.textContent = 'Tu video esta listo.'
-
-    dom.videoFileInput.value = ''
-
-    if (state.selectedLocation) {
-      triggerRipple(state.selectedLocation.lat, state.selectedLocation.lng)
-      handleLocationSelected(state.selectedLocation.lat, state.selectedLocation.lng)
+ 
+    estado.pistaActiva = 'custom'
+ 
+    dom.insigniaGenero.textContent = 'Video propio'
+    dom.insigniaGenero.style.color = '#bd93f9'
+    dom.insigniaGenero.style.borderColor = '#bd93f9'
+ 
+    dom.textoEstado.textContent = 'Cargando tu video...'
+    dom.textoEstado.className = 'info-value status-idle'
+ 
+    await escanerVideo.cargarVideoUsuario(archivo)
+    dom.textoEstado.textContent = 'Tu video esta listo.'
+ 
+    dom.entradaArchivoVideo.value = ''
+ 
+    if (estado.ubicacionSeleccionada) {
+      dispararOnda(estado.ubicacionSeleccionada.lat, estado.ubicacionSeleccionada.lng)
+      alSeleccionarUbicacion(estado.ubicacionSeleccionada.lat, estado.ubicacionSeleccionada.lng)
     }
   })
 }

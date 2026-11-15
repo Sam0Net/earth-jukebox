@@ -29,14 +29,14 @@ earth-jukebox/
 ├── styles/
 │   └── main.css
 ├── js/
-│   ├── main.js
-│   ├── globeView.js
-│   ├── videoScanner.js
-│   └── audioEngine.js
+│   ├── main.js            <- logica de la interfaz y coordinacion general
+│   ├── globeView.js       <- globo 3D (Globe.gl)
+│   ├── videoScanner.js    <- lectura de pixeles del video (clase EscanerVideo)
+│   └── audioEngine.js     <- sintesis de audio (clase MotorAudioHouse)
 └── assets/
     └── videos/
         ├── fires.mp4     <- video NASA de incendios forestales (no incluido en el repo)
-        ├── met.mp4       <- video NASA de emisiones de metano (no incluido en el repo)
+        ├── wet.mp4       <- video NASA de emisiones de metano (no incluido en el repo)
         └── ocean.mp4     <- video NASA de temperatura oceanica (no incluido en el repo)
 ```
 
@@ -61,12 +61,12 @@ Descargar los videos de la NASA y colocarlos en la carpeta `assets/videos/` con 
 | Archivo | Fenómeno | Título original | Descarga |
 |---------|----------|-----------------|----------|
 | `fires.mp4` | Incendios activos | Active Fires As Observed by VIIRS, 2024-Present | [fires_frp_VIIRS_eq_nl_2048p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/fires_frp_VIIRS_eq_nl_2048p30.mp4) |
-| `met.mp4` | Emisiones de metano en humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
+| `wet.mp4` | Emisiones de metano en humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
 | `ocean.mp4` | Temperatura oceánica | Global Sea Surface Currents and Temperature | [ecco2_sst_flow.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/ecco2_sst_flow.mp4) |
 
-Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `met.mp4` y `ocean.mp4`.
+Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `wet.mp4` y `ocean.mp4`.
 
-También se puede usar el botón **Subir Video Propio** dentro de la app para cargar cualquier video MP4 o WebM.
+También se puede usar el botón **Subir tu propio video** dentro de la app para cargar cualquier video MP4 o WebM.
 
 Créditos de los videos: NASA Scientific Visualization Studio.
 
@@ -79,6 +79,13 @@ python3 -m http.server 8080
 ```
 
 Luego abrir en el navegador: `http://localhost:8080`
+
+---
+
+## Convenciones del codigo
+
+- Los nombres de clases, funciones, variables y propiedades estan en español.
+- Se mantienen en ingles las APIs de las librerias (Tone.js, Globe.gl), los ids del HTML, las clases del CSS y las claves internas de cada pista (`fires`, `met`, `ocean`, `custom`).
 
 ---
 
