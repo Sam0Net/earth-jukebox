@@ -83,6 +83,7 @@ earth-jukebox/
 │   ├── audioEngine.js       # Real-time Web Audio synthesis engine (MotorAudioHouse)
 │   └── i18n.js              # Bilingual localization system (EN / ES)
 └── assets/
+    ├── favicon.svg          # Stylized Earth & soundwave vector favicon
     ├── posters/             # Ultra-light WebP first-frame posters (~30-220 KB each)
     │   ├── fires.webp
     │   ├── wet.webp
