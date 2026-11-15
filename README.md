@@ -66,6 +66,12 @@ Descargar los videos de la NASA y colocarlos en la carpeta `assets/videos/` con 
 
 Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `wet.mp4` y `ocean.mp4`.
 
+> **Tip de optimización:** Si los videos descargados vienen en resolución 4K (como 4096×2048 o con pistas de audio pesadas), se pueden optimizar para máxima fluidez a 60 FPS y menor consumo de memoria con:
+> ```bash
+> ffmpeg -i assets/videos/fires.mp4 -vf "scale=2048:1024" -c:v libx264 -preset fast -crf 22 -an -movflags +faststart /tmp/f.mp4 && mv /tmp/f.mp4 assets/videos/fires.mp4
+> ffmpeg -i assets/videos/wet.mp4 -vf "scale=1920:1080" -c:v libx264 -preset fast -crf 22 -an -movflags +faststart /tmp/w.mp4 && mv /tmp/w.mp4 assets/videos/wet.mp4
+> ```
+
 También se puede usar el botón **Subir tu propio video** dentro de la app para cargar cualquier video MP4 o WebM.
 
 Créditos de los videos: NASA Scientific Visualization Studio.

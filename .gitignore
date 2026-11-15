@@ -2,6 +2,7 @@
 assets/videos/*.mp4
 assets/videos/*.webm
 assets/videos/*.mov
+assets/videos/.backup/
 
 # Archivos del sistema
 .DS_Store

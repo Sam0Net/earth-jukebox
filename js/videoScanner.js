@@ -13,7 +13,7 @@ class EscanerVideo {
     this.idCallbackVideo = null
     this.urlBlobActual = null
     this.ultimoTiempoScan = 0
-    this.intervaloMinimoScan = 35 // ~28 FPS máximo de muestreo, elimina caídas de frames en WebGL
+    this.intervaloMinimoScan = 70 // ~14 FPS de muestreo (óptimo para semicorcheas a 128 BPM, reduce al 50% el trabajo GPU/CPU)
 
     this.rutasVideo = {
       fires: 'assets/videos/fires.mp4',
@@ -49,7 +49,10 @@ class EscanerVideo {
       this.video.pause()
       this.video.src = fuente
       this.video.muted = true
+      this.video.defaultMuted = true
       this.video.volume = 0
+      this.video.playsInline = true
+      this.video.disableRemotePlayback = true
       this.video.loop = true
       this.video.currentTime = 0
       this.video.load()

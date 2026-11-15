@@ -81,6 +81,11 @@ class MotorAudioHouse {
  
     await Tone.start()
  
+    // Proteger Web Audio contra dropouts o jitter de renderizado mediante lookAhead generoso
+    if (Tone.context) {
+      Tone.context.lookAhead = 0.25
+    }
+
     // Limitador final para evitar cualquier distorsión o clipeo digital
     this.limitadorMaestro = new Tone.Limiter(-1).toDestination()
 
@@ -143,15 +148,15 @@ class MotorAudioHouse {
     // para eliminar el tono chilloso estridente mientras mantiene el carácter analógico
     this.sinteAcido = new Tone.MonoSynth({
       oscillator: { type: 'sawtooth' },
-      filter: { Q: 2.4, type: 'lowpass', rolloff: -24 },
-      envelope: { attack: 0.012, decay: 0.2, sustain: 0.12, release: 0.18 },
+      filter: { Q: 1.8, type: 'lowpass', rolloff: -24 },
+      envelope: { attack: 0.015, decay: 0.22, sustain: 0.1, release: 0.18 },
       filterEnvelope: {
-        attack: 0.012,
-        decay: 0.22,
+        attack: 0.015,
+        decay: 0.24,
         sustain: 0.08,
         release: 0.2,
         baseFrequency: 65,
-        octaves: 3.2
+        octaves: 2.6
       }
     }).connect(this.filtroMaestro)
  
@@ -176,7 +181,7 @@ class MotorAudioHouse {
  
     this.sinteMarimba = new Tone.PolySynth(Tone.Synth, {
       oscillator: { type: 'triangle' },
-      envelope: { attack: 0.015, decay: 0.28, sustain: 0.08, release: 0.25 }
+      envelope: { attack: 0.02, decay: 0.28, sustain: 0.08, release: 0.25 }
     }).connect(this.reverberacion)
  
     this.padOceano = new Tone.PolySynth(Tone.Synth, {
@@ -216,29 +221,29 @@ class MotorAudioHouse {
       this.bpmActual = 128
       this.corteBase = 950
       this.rangoCorte = 14
-      this.corteMaximo = 4600
+      this.corteMaximo = 3400
       this.bombo.volume.value = 0
       this.hiHatCerrado.volume.value = -18
       this.hiHatAbierto.volume.value = -16
       this.palmada.volume.value = -11
       this.percBongo.volume.value = -12
-      this.sinteAcido.volume.value = -9
+      this.sinteAcido.volume.value = -11
       this.sinteAcordes.volume.value = -20
     } else if (tipoPista === 'met') {
       this.bpmActual = 116
       this.corteBase = 350
       this.rangoCorte = 14
-      this.corteMaximo = 3800
+      this.corteMaximo = 3000
       this.bombo.volume.value = 0
       this.hiHatCerrado.volume.value = -16
       this.palmada.volume.value = -10
       this.percBongo.volume.value = -6
-      this.sinteMarimba.volume.value = -8
+      this.sinteMarimba.volume.value = -10
     } else {
       this.bpmActual = 122
       this.corteBase = 700
       this.rangoCorte = 10
-      this.corteMaximo = 3600
+      this.corteMaximo = 2800
       this.bombo.volume.value = 0
       this.hiHatCerrado.volume.value = -20
       this.hiHatAbierto.volume.value = -18
@@ -274,7 +279,8 @@ class MotorAudioHouse {
  
     this.luminanciaSuavizada += (lum - this.luminanciaSuavizada) * 0.2
     const corte = Math.min(this.corteBase + this.luminanciaSuavizada * this.rangoCorte, this.corteMaximo)
-    this.filtroMaestro.frequency.rampTo(corte, 0.1)
+    // Sincronizar con el timestamp exacto del audio thread
+    this.filtroMaestro.frequency.rampTo(corte, 0.08, tiempo)
  
     const paso = this.contadorPasos
     const s = paso % 16
@@ -332,8 +338,10 @@ class MotorAudioHouse {
       }
     }
  
+    // Envolvente de filtro estable y calibrada, sin mutaciones bruscas por compás
     if (s === 0) {
-      this.sinteAcido.filterEnvelope.octaves = 1.6 + (g / 255) * 1.5
+      const freqBase = 58 + Math.round((g / 255) * 16)
+      this.sinteAcido.filterEnvelope.baseFrequency = freqBase
     }
  
     const patron = this.patronesAcido[(indiceCompas + Math.floor(r / 64)) % this.patronesAcido.length]
@@ -423,7 +431,7 @@ class MotorAudioHouse {
     const indiceG = Math.min(Math.floor((g / 255) * indiceMax), indiceMax)
     const notaMarimba = escalaActual[indiceG]
     if (s8 % 2 === 0 || lum > 80) {
-      this.sinteMarimba.triggerAttackRelease(notaMarimba, '8n', tiempo + 0.04, this.limitar(0.42 + lum / 600))
+      this.sinteMarimba.triggerAttackRelease(notaMarimba, '8n', tiempo, this.limitar(0.38 + lum / 700))
     }
   }
  
