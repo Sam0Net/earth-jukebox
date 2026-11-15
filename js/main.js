@@ -1,4 +1,13 @@
-import { iniciarGlobo, dispararOnda, enfocarUbicacion, alternarRotacionGlobo, obtenerRotacionGlobo } from './globeView.js'
+import {
+  iniciarGlobo,
+  dispararOnda,
+  enfocarUbicacion,
+  alternarRotacionGlobo,
+  obtenerRotacionGlobo,
+  actualizarColorPistaGlobo,
+  fijarMarcadorUbicacion,
+  limpiarMarcadorUbicacion
+} from './globeView.js'
 import { escanerVideo } from './videoScanner.js'
 import { motorAudio } from './audioEngine.js'
 import {
@@ -231,6 +240,9 @@ async function alSeleccionarUbicacion(lat, lng, prefijoRegion = '') {
   ultimoReporteUI = 0
   primerReportePendiente = true
 
+  const meta = metadatosPistas[estado.pistaActiva] || metadatosPistas.fires
+  dispararOnda(lat, lng, meta.color)
+
   var pixel = escanerVideo.latLngAPixel(lat, lng)
   dom.marcadorVideo.style.left = pixel.porcentajeX + '%'
   dom.marcadorVideo.style.top = pixel.porcentajeY + '%'
@@ -306,6 +318,7 @@ async function cambiarPista(nuevaPista) {
   dom.insigniaGenero.textContent = meta.insignia
   dom.insigniaGenero.style.color = meta.color
   dom.insigniaGenero.style.borderColor = meta.color
+  actualizarColorPistaGlobo(meta.color)
 
   var nombre = meta.insignia
   dom.textoEstado.textContent = t('statusLoading', { name: nombre })
