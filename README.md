@@ -142,14 +142,14 @@ Navigate to `http://localhost:8080` in any modern web browser (Chrome, Firefox, 
 
 Satellite video visualizations are produced by the **NASA Scientific Visualization Studio (SVS)** and the **Earth Information Center (EIC)**:
 
-| Layer | Original NASA Dataset Title | SVS Identifier & Source Link |
-| :--- | :--- | :--- |
-| **Active Fires** | *Active Fires As Observed by VIIRS, 2024-Present* | [SVS Entry #5113](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/) |
-| **Wetlands Methane** | *Methane Emissions from Wetlands* | [SVS Entry #5054](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/) |
-| **Ocean Temperature** | *Global Sea Surface Currents and Temperature* | [SVS Entry #3912](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/) |
-| **Atmospheric CO₂** | *DYAMOND Global Carbon Dioxide for Science On A Sphere* | [SVS Entry #5436](https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005436/) |
-| **Surface Ozone (O₃)** | *Near Surface Ozone (O3)* | [SVS Entry #5152](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005152/) |
-| **Precipitation & Clouds** | *GEOS-FP Precipitation and Clouds* | [SVS Entry #5149](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005149/) |
+| Archivo | Fenómeno | Título original | Descarga |
+|---------|----------|-----------------|----------|
+| `fires.mp4` | Incendios activos | Active Fires As Observed by VIIRS, 2024-Present | [fires_frp_VIIRS_eq_nl_2048p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/fires_frp_VIIRS_eq_nl_2048p30.mp4) |
+| `wet.mp4` | Emisiones de metano por humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
+| `ocean.mp4` | Temperatura oceánica | Global Sea Surface Currents and Temperature | [ecco2_sst_flow.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/ecco2_sst_flow.mp4) |
+| `co2.mp4` | PPM de dioxido de carbon | DYAMOND Global Carbon Dioxide for Science On A Sphere | [soscomp_1-29-2025a_1024p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005436/soscomp_1-29-2025a_1024p30.mp4) |
+| `o3.mp4` | Ozono cerca de la superficie | Near surface Ozone (O3) | [MC02_stage4_GMAO_O3_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005152/MC02_stage4_GMAO_O3_2048x1024_en.mp4) |
+| `precipitation.mp4` | Precipitacion y nubes | GEOS-FP Precipitation and Clouds | [MC03_stage3_GMAO_precipitation_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005149/MC03_stage3_GMAO_precipitation_2048x1024_en.mp4) |
 
 ---
 
