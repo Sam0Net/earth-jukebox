@@ -83,16 +83,23 @@ earth-jukebox/
 │   ├── audioEngine.js       # Real-time Web Audio synthesis engine (MotorAudioHouse)
 │   └── i18n.js              # Bilingual localization system (EN / ES)
 └── assets/
-    └── videos/              # Pre-optimized web-ready satellite video datasets (<35 MB each)
-        ├── fires.mp4         # Active Wildfires (VIIRS)
-        ├── wet.mp4           # Wetland Methane Emissions
-        ├── ocean.mp4         # Sea Surface Temperature & Currents
-        ├── co2.mp4           # Global Carbon Dioxide Concentrations
-        ├── o3.mp4            # Near-Surface Ozone
-        └── precipitation.mp4 # Precipitation and Cloud Systems
+    ├── posters/             # Ultra-light WebP first-frame posters (~30-220 KB each)
+    │   ├── fires.webp
+    │   ├── wet.webp
+    │   ├── ocean.webp
+    │   ├── co2.webp
+    │   ├── o3.webp
+    │   └── precipitation.webp
+    └── videos/              # Pre-optimized web-ready satellite video datasets (<15 MB each)
+        ├── fires.mp4         # Active Wildfires (VIIRS, 1.8 MB)
+        ├── wet.mp4           # Wetland Methane Emissions (2.7 MB)
+        ├── ocean.mp4         # Sea Surface Temperature & Currents (13 MB)
+        ├── co2.mp4           # Global Carbon Dioxide Concentrations (4.3 MB)
+        ├── o3.mp4            # Near-Surface Ozone (4.7 MB)
+        └── precipitation.mp4 # Precipitation and Cloud Systems (5.5 MB)
 ```
 
-> **Note on Datasets**: All 6 satellite `.mp4` video files are optimized (H.264, 1280×640 equirectangular, stripped audio, `<35 MB` each) and tracked directly in this repository. No external downloads are required to run the project.
+> **Note on Datasets**: All 6 satellite `.mp4` video files are optimized (H.264, 1280×640 equirectangular, stripped audio, `<15 MB` each, ~32 MB combined total) and tracked directly in this repository. No external downloads are required to run the project.
 
 ---
 

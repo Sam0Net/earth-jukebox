@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   dom.textoEstado.textContent = t('statusLoading', { name: metaInicial.insignia })
   await escanerVideo.cargarVideo(estado.pistaActiva)
   dom.textoEstado.textContent = t('statusIdle')
+  escanerVideo.iniciarPrecargaInteligente()
 
   iniciarGlobo('globeViz', (lat, lng) => {
     if (estado.exploracionGuiadaActiva) {
@@ -318,6 +319,33 @@ async function cambiarPista(nuevaPista) {
   dom.textoEstado.textContent = t('statusReady', { name: nombre })
   if (dom.textoTelemetria && !estado.ubicacionSeleccionada) {
     dom.textoTelemetria.textContent = t('telemetryIdle')
+  }
+
+  if (estado.estaReproduciendo && estado.ubicacionSeleccionada) {
+    primerReportePendiente = true
+    escanerVideo.iniciarEscaneo(
+      estado.ubicacionSeleccionada.lat,
+      estado.ubicacionSeleccionada.lng,
+      (datos) => {
+        ultimosDatosFrame = datos
+        if (!estado.estaReproduciendo) return
+
+        const ahora = performance.now()
+        if (primerReportePendiente || ahora - ultimoReporteUI >= 1500) {
+          ultimoReporteUI = ahora
+          const metrica = describirMetricaFisica(datos, estado.pistaActiva)
+          dom.textoEstado.textContent = metrica.principal
+          if (dom.textoTelemetria) {
+            dom.textoTelemetria.textContent = metrica.detalle
+          }
+          if (primerReportePendiente) {
+            primerReportePendiente = false
+            anunciarAccesibilidad(metrica.anuncio)
+          }
+        }
+      }
+    )
+    motorAudio.iniciarReproduccion(estado.pistaActiva, () => ultimosDatosFrame)
   }
 }
 

@@ -102,15 +102,72 @@ html, body {
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 6px;
+  contain: paint;
+}
+
+.video-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  transition: opacity 0.25s ease-out;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .video-monitor-wrapper video {
+  position: relative;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   transform: translateZ(0);
-  will-change: transform;
+  will-change: opacity, transform;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 2;
+}
+
+.video-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(33, 34, 44, 0.65);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.video-monitor-wrapper.is-buffering .video-loading-overlay {
+  opacity: 1;
+}
+
+.loading-pulse-ring {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--line);
+  border-top-color: var(--cyan);
+  border-right-color: var(--purple);
+  border-radius: 50%;
+  animation: spinRing 0.8s linear infinite;
+}
+
+@keyframes spinRing {
+  to { transform: rotate(360deg); }
+}
+
+.loading-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 .video-coordinate-marker {
@@ -124,6 +181,7 @@ html, body {
   box-shadow: 0 0 0 3px rgba(255, 121, 198, 0.35);
   transform: translate(-50%, -50%);
   pointer-events: none;
+  z-index: 4;
 }
 
 .section-label {

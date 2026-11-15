@@ -10,6 +10,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles/main.css">
 
+  <link rel="prefetch" href="assets/posters/fires.webp" as="image">
+  <link rel="prefetch" href="assets/posters/wet.webp" as="image">
+  <link rel="prefetch" href="assets/posters/ocean.webp" as="image">
+  <link rel="prefetch" href="assets/posters/co2.webp" as="image">
+  <link rel="prefetch" href="assets/posters/o3.webp" as="image">
+  <link rel="prefetch" href="assets/posters/precipitation.webp" as="image">
+
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
   <script src="https://unpkg.com/globe.gl@2.32.0/dist/globe.gl.min.js"></script>
   <script src="https://unpkg.com/tone@14.7.77/build/Tone.js"></script>
@@ -61,8 +68,13 @@
     </header>
 
     <section class="hud-section video-section">
-      <div class="video-monitor-wrapper">
-        <video id="nasaVideo" src="assets/videos/fires.mp4" playsinline muted autoplay loop preload="auto"></video>
+      <div id="videoMonitor" class="video-monitor-wrapper">
+        <div id="videoBackdrop" class="video-backdrop" style="background-image: url('assets/posters/fires.webp');"></div>
+        <video id="nasaVideo" src="assets/videos/fires.mp4" poster="assets/posters/fires.webp" playsinline muted autoplay loop preload="auto"></video>
+        <div id="videoLoadingSpinner" class="video-loading-overlay" aria-hidden="true">
+          <div class="loading-pulse-ring"></div>
+          <span class="loading-label" data-i18n="videoBuffering">Syncing satellite feed...</span>
+        </div>
         <div id="videoMarker" class="video-coordinate-marker"></div>
       </div>
     </section>

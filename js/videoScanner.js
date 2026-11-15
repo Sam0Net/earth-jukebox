@@ -6,6 +6,9 @@ class EscanerVideo {
     this.canvas.height = 5
     this.ctx = this.canvas.getContext('2d', { willReadFrequently: true })
 
+    this.contenedorMonitor = document.getElementById('videoMonitor')
+    this.backdrop = document.getElementById('videoBackdrop')
+
     this.pistaActual = 'fires'
     this.estaEscaneando = false
     this.idFrameAnimacion = null
@@ -23,15 +26,25 @@ class EscanerVideo {
       o3: 'assets/videos/o3.mp4',
       precipitation: 'assets/videos/precipitation.mp4'
     }
+
+    this.rutasPoster = {
+      fires: 'assets/posters/fires.webp',
+      met: 'assets/posters/wet.webp',
+      ocean: 'assets/posters/ocean.webp',
+      co2: 'assets/posters/co2.webp',
+      o3: 'assets/posters/o3.webp',
+      precipitation: 'assets/posters/precipitation.webp'
+    }
+
+    this.videosPrecargados = new Set(['fires'])
+    this.precargaIniciada = false
   }
 
   async cargarVideo(tipoPista) {
     this.pistaActual = tipoPista
-    var fuente = this.rutasVideo[tipoPista]
-    if (!fuente) {
-      fuente = this.rutasVideo['fires']
-    }
-    return this._aplicarFuenteVideo(fuente)
+    var fuente = this.rutasVideo[tipoPista] || this.rutasVideo['fires']
+    var poster = this.rutasPoster[tipoPista] || null
+    return this._aplicarFuenteVideo(fuente, poster)
   }
 
   async cargarVideoUsuario(archivo) {
@@ -42,10 +55,10 @@ class EscanerVideo {
     }
     var urlBlob = URL.createObjectURL(archivo)
     this.urlBlobActual = urlBlob
-    return this._aplicarFuenteVideo(urlBlob)
+    return this._aplicarFuenteVideo(urlBlob, null)
   }
 
-  _aplicarFuenteVideo(fuente) {
+  _aplicarFuenteVideo(fuente, poster) {
     if (this.controladorCarga) {
       this.controladorCarga.abort()
     }
@@ -55,7 +68,61 @@ class EscanerVideo {
     return new Promise((resolver) => {
       this.detenerEscaneo()
 
+      if (!this.contenedorMonitor) {
+        this.contenedorMonitor = document.getElementById('videoMonitor')
+      }
+      if (!this.backdrop) {
+        this.backdrop = document.getElementById('videoBackdrop')
+      }
+
+      // 1. Transición instantánea: mostrar póster del nuevo fenómeno de inmediato (0 ms)
+      if (poster && this.backdrop) {
+        this.backdrop.style.backgroundImage = `url('${poster}')`
+        this.backdrop.style.opacity = '1'
+      }
+      if (this.contenedorMonitor) {
+        this.contenedorMonitor.classList.add('is-buffering')
+      }
+      this.video.style.opacity = '0'
+
+      let resuelto = false
+      const finalizarCarga = (exito) => {
+        if (resuelto) return
+        resuelto = true
+
+        this.video.removeEventListener('canplay', onReady)
+        this.video.removeEventListener('loadeddata', onReady)
+
+        if (this.contenedorMonitor) {
+          this.contenedorMonitor.classList.remove('is-buffering')
+        }
+        this.video.style.opacity = '1'
+
+        // Desvanecer el póster de fondo suavemente una vez que el video esté visible
+        setTimeout(() => {
+          if (this.backdrop && !this.contenedorMonitor?.classList.contains('is-buffering')) {
+            this.backdrop.style.opacity = '0'
+          }
+        }, 180)
+
+        resolver(exito)
+      }
+
+      const onReady = () => {
+        this.video.play()
+          .then(() => finalizarCarga(true))
+          .catch(() => finalizarCarga(true))
+      }
+
+      signal.addEventListener('abort', () => finalizarCarga(false), { once: true })
+      this.video.addEventListener('canplay', onReady, { once: true, signal })
+      this.video.addEventListener('loadeddata', onReady, { once: true, signal })
+      this.video.addEventListener('error', () => finalizarCarga(false), { once: true, signal })
+
       this.video.pause()
+      if (poster) {
+        this.video.poster = poster
+      }
       this.video.src = fuente
       this.video.muted = true
       this.video.defaultMuted = true
@@ -65,21 +132,55 @@ class EscanerVideo {
       this.video.loop = true
       this.video.currentTime = 0
       this.video.load()
-
-      signal.addEventListener('abort', () => resolver(false), { once: true })
-
-      this.video.addEventListener('loadeddata', () => {
-        this.video.play().then(() => {
-          resolver(true)
-        }).catch(() => {
-          resolver(true)
-        })
-      }, { once: true, signal })
-
-      this.video.addEventListener('error', () => {
-        resolver(false)
-      }, { once: true, signal })
     })
+  }
+
+  iniciarPrecargaInteligente() {
+    if (this.precargaIniciada) return
+    this.precargaIniciada = true
+
+    const ejecutarPrecarga = () => {
+      const pistas = Object.keys(this.rutasVideo)
+      let offsetMs = 800
+
+      pistas.forEach((pista) => {
+        if (pista === 'fires' || this.videosPrecargados.has(pista)) return
+        this.videosPrecargados.add(pista)
+
+        setTimeout(() => {
+          this._precargarVideo(this.rutasVideo[pista], this.rutasPoster[pista])
+        }, offsetMs)
+
+        offsetMs += 600
+      })
+    }
+
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(ejecutarPrecarga, { timeout: 3500 })
+    } else {
+      setTimeout(ejecutarPrecarga, 2000)
+    }
+  }
+
+  _precargarVideo(urlVideo, urlPoster) {
+    if (urlPoster) {
+      const img = new Image()
+      img.src = urlPoster
+    }
+    if (urlVideo) {
+      try {
+        const link = document.createElement('link')
+        link.rel = 'prefetch'
+        link.as = 'video'
+        link.href = urlVideo
+        document.head.appendChild(link)
+      } catch (_) {}
+
+      const v = document.createElement('video')
+      v.preload = 'auto'
+      v.muted = true
+      v.src = urlVideo
+    }
   }
 
   latLngAPixel(lat, lng) {
