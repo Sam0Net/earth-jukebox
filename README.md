@@ -6,8 +6,8 @@
 </p>
 
 <p align="center">
-  <strong>Developed for the NASA Space Apps Challenge</strong><br>
-  <em>Challenge: Earth Information Center (EIC) — Translating Sight into Sound</em>
+  <strong>Developed for the NASA Space Apps Challenge 2026</strong><br>
+  <em>Challenge: The Earth Information Jukebox</em>
 </p>
 
 ---
@@ -181,5 +181,5 @@ Developed for the **NASA Space Apps Challenge 2026**:
 ---
 
 <p align="center">
-  <strong>NASA Space Apps Challenge 2026 — Translating Earth Sight into Sound 🌎✨</strong>
+  <strong>NASA Space Apps Challenge 2026 — The Earth Information Jukebox 🌎✨</strong>
 </p>
