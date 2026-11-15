@@ -1,6 +1,14 @@
-# The Earth Information Jukebox
+<h1 align="center">The Earth Information Jukebox</h1>
 
-Proyecto desarrollado para el NASA Space Apps Challenge.
+
+
+<p align="center">
+  "Al menos 2200 millones de personas presentan deterioro de la visión, ya sea cercana o lejana" (Organización Mundial de la Salud [OMS], 2026, párr. 1).
+</p>
+
+---
+
+**Proyecto desarrollado para el NASA Space Apps Challenge.**
 
 Convierte videos satelitales de la NASA en musica House en tiempo real. El usuario hace clic en cualquier punto del globo terraqueo 3D y el sistema analiza el color del pixel en ese punto dentro del video satelital, generando un beat de House distinto segun el fenomeno climatico activo.
 
@@ -15,9 +23,9 @@ Convierte videos satelitales de la NASA en musica House en tiempo real. El usuar
 
 Cada fenomeno tiene su propio subgenero:
 
-- **Incendios forestales** - Acid House 128 BPM (sintetizador TB-303, canal rojo)
-- **Metano en humedales** - Afro Deep House 116 BPM (marimba, canal verde)
-- **Temperatura oceanica** - Progressive House 122 BPM (pad oceanico, canal azul)
+- **Incendios forestales** - Acid House
+- **Metano en humedales** - Afro Deep House
+- **Temperatura oceanica** - Progressive House
 
 ---
 
@@ -35,9 +43,12 @@ earth-jukebox/
 │   └── audioEngine.js     <- sintesis de audio (clase MotorAudioHouse)
 └── assets/
     └── videos/
-        ├── fires.mp4     <- video NASA de incendios forestales (no incluido en el repo)
-        ├── wet.mp4       <- video NASA de emisiones de metano (no incluido en el repo)
-        └── ocean.mp4     <- video NASA de temperatura oceanica (no incluido en el repo)
+        ├── fires.mp4            <- video NASA de incendios forestales (no incluido en el repo)
+        ├── wet.mp4              <- video NASA de emisiones de metano por humedales (no incluido en el repo)
+        ├── ocean.mp4            <- video NASA de temperatura oceanica (no incluido en el repo)
+        ├── co2.mp4              <- video NASA de PPM de dioxido de carbono (no incluido en el repo)
+        ├── o3.mp4               <- video NASA de ozono cerca de la superficie (no incluido en el repo)
+        └── precipitation.mp4    <- video NASA de precipitacion y nubes (no incluido en el repo)
 ```
 
 > Los archivos `.mp4` no estan incluidos en el repositorio por su tamano. Ver la seccion de instalacion.
@@ -61,8 +72,11 @@ Descargar los videos de la NASA y colocarlos en la carpeta `assets/videos/` con 
 | Archivo | Fenómeno | Título original | Descarga |
 |---------|----------|-----------------|----------|
 | `fires.mp4` | Incendios activos | Active Fires As Observed by VIIRS, 2024-Present | [fires_frp_VIIRS_eq_nl_2048p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/fires_frp_VIIRS_eq_nl_2048p30.mp4) |
-| `wet.mp4` | Emisiones de metano en humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
+| `wet.mp4` | Emisiones de metano por humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
 | `ocean.mp4` | Temperatura oceánica | Global Sea Surface Currents and Temperature | [ecco2_sst_flow.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/ecco2_sst_flow.mp4) |
+| `co2.mp4` | PPM de dioxido de carbon | DYAMOND Global Carbon Dioxide for Science On A Sphere | [soscomp_1-29-2025a_1024p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005436/soscomp_1-29-2025a_1024p30.mp4) |
+| `o3.mp4` | Ozono cerca de la superficie | Near surface Ozone (O3) | [MC02_stage4_GMAO_O3_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005152/MC02_stage4_GMAO_O3_2048x1024_en.mp4) |
+| `precipitation.mp4` | Precipitacion y nubes | GEOS-FP Precipitation and Clouds | [MC03_stage3_GMAO_precipitation_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005149/MC03_stage3_GMAO_precipitation_2048x1024_en.mp4) |
 
 Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `wet.mp4` y `ocean.mp4`.
 
@@ -108,5 +122,6 @@ Luego abrir en el navegador: `http://localhost:8080`
 ## Integrantes
 - Sam0Net
 - JLoayz
-- 
+
+
 NASA Space Apps Challenge 2026
