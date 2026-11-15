@@ -1,128 +1,178 @@
-<h1 align="center">The Earth Information Jukebox</h1>
-
-
+# The Earth Information Jukebox
 
 <p align="center">
-  "Al menos 2200 millones de personas presentan deterioro de la visión, ya sea cercana o lejana" (Organización Mundial de la Salud [OMS], 2026, párr. 1).
+  <em>"At least 2.2 billion people have a near or distance vision impairment"</em><br>
+  — <strong>World Health Organization (WHO), 2026</strong>
+</p>
+
+<p align="center">
+  <strong>Developed for the NASA Space Apps Challenge</strong><br>
+  <em>Challenge: Earth Information Center (EIC) — Translating Sight into Sound</em>
 </p>
 
 ---
 
-**Proyecto desarrollado para el NASA Space Apps Challenge.**
+## 🌍 Overview
 
-Convierte videos satelitales de la NASA en musica House en tiempo real. El usuario hace clic en cualquier punto del globo terraqueo 3D y el sistema analiza el color del pixel en ese punto dentro del video satelital, generando un beat de House distinto segun el fenomeno climatico activo.
+**The Earth Information Jukebox** transforms NASA satellite visualizations into dynamic, real-time House music soundscapes. By interacting with an interactive 3D globe, users can sample coordinate pixels directly from NASA Earth Information Center (EIC) data streams. The system analyzes pixel brightness, RGB balance, and chromatic density in real time, mapping visual Earth science into evolving electronic music subgenres.
 
----
-
-## Como funciona
-
-1. Se carga un video satelital de la NASA en segundo plano
-2. El usuario hace clic en un punto del globo 3D
-3. El sistema lee el valor RGB del pixel correspondiente a esas coordenadas en el video
-4. Con esos datos se genera musica House en tiempo real usando Tone.js
-
-Cada fenomeno tiene su propio subgenero:
-
-- **Incendios forestales** - Acid House
-- **Metano en humedales** - Afro Deep House
-- **Temperatura oceanica** - Progressive House
+Our mission is to make complex Earth science **accessible, multi-sensory, and engaging** for everyone—especially blind and low-vision individuals—by converting vital environmental visual data into intuitive, emotive, and pleasant auditory experiences.
 
 ---
 
-## Estructura del proyecto
+## 🎵 How It Works
+
+```
+┌────────────────────────┐      ┌─────────────────────────┐      ┌─────────────────────────┐
+│   NASA EIC Satellite   │ ───► │  5×5 Matrix Sampling &  │ ───► │ Tone.js Sound Synthesis │
+│  Video Stream (H.264)  │      │   Color Space Analysis  │      │  (Tempo, Pitch, Chords) │
+└────────────────────────┘      └─────────────────────────┘      └─────────────────────────┘
+            ▲                                                                 │
+            │ Coordinates (Lat / Lon)                                         ▼
+┌────────────────────────┐                                       ┌─────────────────────────┐
+│  Interactive 3D Globe  │ ◄──────────────────────────────────── │ Dynamic House Soundscape│
+│  (Globe.gl / Three.js) │                                       │ (Acid, Deep, Afro, etc) │
+└────────────────────────┘                                       └─────────────────────────┘
+```
+
+1. **Equirectangular Video Synchronization**: High-definition NASA scientific visualization videos loop seamlessly in the background as equirectangular frames ($2:1$ aspect ratio).
+2. **Spatial Coordinate Sampling**: When a user clicks, hovers, or triggers autoplay coordinates on the 3D globe, geographic coordinates $(\text{latitude}, \text{longitude})$ are mapped to frame pixels $(X, Y)$.
+3. **5×5 Kernel Matrix Analysis**: To prevent abrupt auditory jumps from digital noise or clouds, a $5\times5$ pixel kernel is analyzed to compute weighted average brightness, dominant hue, and chromatic energy.
+4. **Algorithmic Musical Synthesis**: Rather than playing pre-recorded audio loops, **Tone.js** synthesizes musical elements in real time (chords, basslines, percussion, arpeggios, and atmospheric filters) locked to a 4/4 House tempo.
+
+---
+
+## 🎧 Climate Phenomena & Musical Subgenres
+
+Each active satellite layer is assigned a bespoke electronic House subgenre designed to reflect both the scientific nature and emotional gravity of the data:
+
+| Layer | NASA Satellite Dataset | Musical Subgenre | Sonification Characteristics |
+| :--- | :--- | :--- | :--- |
+| 🔥 **Wildfires** | *Active Fires as Observed by VIIRS* | **Acid House** | Resonant 303 acid bassline, high-speed 16th-note arpeggios, overdrive distortion driven by heat intensity. |
+| 🌿 **Methane** | *Methane Emissions from Wetlands* | **Afro Deep House** | Organic polyrhythms, warm Fender Rhodes chords, deep sub-bass driven by tropical wetland density. |
+| 🌊 **Oceans** | *Global Sea Surface Currents & Temp* | **Progressive House** | Oceanic atmospheric pads, soaring leads, rhythmic delay sweeps responding to current velocities. |
+| 🏭 **CO₂** | *DYAMOND Global Carbon Dioxide* | **Tech House** | Driving punchy kick drum, industrial metallic stabs, tension risers modulated by greenhouse PPM. |
+| 🛡️ **Ozone** | *Near-Surface Ozone ($O_3$)* | **Deep Minimal House** | Hypnotic micro-percussions, smooth sine sub-bass, ethereal space reverbs. |
+| 🌧️ **Precipitation** | *GEOS-FP Precipitation & Cloud Systems* | **Melodic Liquid House** | Fluid piano chords, atmospheric precipitation noise generators, shimmering spatial delays. |
+| 📁 **Custom Video** | *User-Uploaded MP4 / WebM* | **Adaptive House** | Dynamically adapts tempo, root key, and filter parameters to match user-provided media. |
+
+---
+
+## ♿ Accessibility & Inclusivity (WCAG 2.2 Compliant)
+
+Accessibility is at the core of the Earth Jukebox:
+- **Screen Reader Support**: Live updates via `aria-live="polite"` announce selected regions, active climate layers, coordinates, and sonification parameters.
+- **Bilingual Internationalization (i18n)**: English by default, with an instant toggle to Spanish in the Accessibility menu.
+- **Keyboard Navigation**: Full interface navigation via `Tab`, `Shift+Tab`, `Enter`, `Space`, and `Esc`.
+- **Auto-Tour / Exploration Mode**: Automated cyclical globe navigation for users unable to use mouse pointer devices.
+- **Dracula High-Contrast Palette**: Optimized contrast ratios meeting WCAG AAA requirements for low-vision and color-blind users.
+
+---
+
+## 📁 Repository Structure
 
 ```
 earth-jukebox/
-├── index.html
+├── index.html               # Main HTML5 application shell & accessibility landmarks
 ├── styles/
-│   └── main.css
+│   └── main.css             # Dracula high-contrast UI design system & responsive layout
 ├── js/
-│   ├── main.js            <- logica de la interfaz y coordinacion general
-│   ├── globeView.js       <- globo 3D (Globe.gl)
-│   ├── videoScanner.js    <- lectura de pixeles del video (clase EscanerVideo)
-│   ├── audioEngine.js     <- sintesis de audio (clase MotorAudioHouse)
-│   └── i18n.js            <- sistema de internacionalización (inglés por defecto y español)
+│   ├── main.js              # Application lifecycle, DOM orchestration, and event binding
+│   ├── globeView.js         # 3D interactive Earth globe (Globe.gl + Three.js)
+│   ├── videoScanner.js      # Real-time HTML5 Canvas 5x5 pixel extraction (EscanerVideo)
+│   ├── audioEngine.js       # Real-time Web Audio synthesis engine (MotorAudioHouse)
+│   └── i18n.js              # Bilingual localization system (EN / ES)
 └── assets/
-    └── videos/
-        ├── fires.mp4            <- video NASA de incendios forestales (optimizado web)
-        ├── wet.mp4              <- video NASA de emisiones de metano por humedales (optimizado web)
-        ├── ocean.mp4            <- video NASA de temperatura oceanica (optimizado web)
-        ├── co2.mp4              <- video NASA de PPM de dioxido de carbono (optimizado web)
-        ├── o3.mp4               <- video NASA de ozono cerca de la superficie (optimizado web)
-        └── precipitation.mp4    <- video NASA de precipitacion y nubes (optimizado web)
+    └── videos/              # Pre-optimized web-ready satellite video datasets (<35 MB each)
+        ├── fires.mp4         # Active Wildfires (VIIRS)
+        ├── wet.mp4           # Wetland Methane Emissions
+        ├── ocean.mp4         # Sea Surface Temperature & Currents
+        ├── co2.mp4           # Global Carbon Dioxide Concentrations
+        ├── o3.mp4            # Near-Surface Ozone
+        └── precipitation.mp4 # Precipitation and Cloud Systems
 ```
 
-> Los archivos `.mp4` están incluidos directamente en el repositorio en formato optimizado para web (H.264, 1280×640 equirectangular, `<35 MB` cada uno).
+> **Note on Datasets**: All 6 satellite `.mp4` video files are optimized (H.264, 1280×640 equirectangular, stripped audio, `<35 MB` each) and tracked directly in this repository. No external downloads are required to run the project.
 
 ---
 
-## Instalacion y uso
+## 🚀 Quick Start
 
-### 1. Clonar el repositorio
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Sam0Net/The-Earth-Information-Jukebox.git
-cd The-Earth-Information-Jukebox
-git checkout AlternativaB
+git clone https://github.com/Sam0Net/earth-jukebox.git
+cd earth-jukebox
 ```
 
-### 2. Agregar los videos
+### 2. Start a Local HTTP Server
 
-Descargar los videos de la NASA y colocarlos en la carpeta `assets/videos/` con exactamente estos nombres:
+Due to browser security policies governing Web Audio API, Canvas 2D pixel extraction, and ES Modules, the app must be served over an HTTP server rather than opened directly via `file://`.
 
-| Archivo | Fenómeno | Título original | Descarga |
-|---------|----------|-----------------|----------|
-| `fires.mp4` | Incendios activos | Active Fires As Observed by VIIRS, 2024-Present | [fires_frp_VIIRS_eq_nl_2048p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/fires_frp_VIIRS_eq_nl_2048p30.mp4) |
-| `wet.mp4` | Emisiones de metano por humedales | Methane Emissions from Wetlands | [ch4_wetlands_maponly.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/ch4_wetlands_maponly.mp4) |
-| `ocean.mp4` | Temperatura oceánica | Global Sea Surface Currents and Temperature | [ecco2_sst_flow.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/ecco2_sst_flow.mp4) |
-| `co2.mp4` | PPM de dióxido de carbono (CO2) | DYAMOND Global Carbon Dioxide for Science On A Sphere | [soscomp_1-29-2025a_1024p30.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005436/soscomp_1-29-2025a_1024p30.mp4) |
-| `o3.mp4` | Capa de ozono cerca de la superficie (O3) | Near surface Ozone (O3) | [MC02_stage4_GMAO_O3_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005152/MC02_stage4_GMAO_O3_2048x1024_en.mp4) |
-| `precipitation.mp4` | Precipitación global y nubes | GEOS-FP Precipitation and Clouds | [MC03_stage3_GMAO_precipitation_2048x1024_en.mp4](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005149/MC03_stage3_GMAO_precipitation_2048x1024_en.mp4) |
-
-Los videos originales se descargan con otro nombre, por lo que hay que renombrarlos a `fires.mp4`, `wet.mp4`, `ocean.mp4`, `co2.mp4`, `o3.mp4` y `precipitation.mp4`.
-
-> **Tip de optimización:** Si los videos descargados vienen en resolución 4K (como 4096×2048 o con pistas de audio pesadas), se pueden optimizar para máxima fluidez a 60 FPS y menor consumo de memoria con:
-> ```bash
-> ffmpeg -i assets/videos/fires.mp4 -vf "scale=2048:1024" -c:v libx264 -preset fast -crf 22 -an -movflags +faststart /tmp/f.mp4 && mv /tmp/f.mp4 assets/videos/fires.mp4
-> ffmpeg -i assets/videos/wet.mp4 -vf "scale=1920:1080" -c:v libx264 -preset fast -crf 22 -an -movflags +faststart /tmp/w.mp4 && mv /tmp/w.mp4 assets/videos/wet.mp4
-> ```
-
-También se puede usar el botón **Subir tu propio video** dentro de la app para cargar cualquier video MP4 o WebM.
-
-Créditos de los videos: NASA Scientific Visualization Studio.
-
-### 3. Levantar un servidor local
-
-No se puede abrir `index.html` directamente desde el sistema de archivos porque el navegador bloquea los modulos ES y el acceso al canvas. Se necesita un servidor:
-
+**Option A (Python 3):**
 ```bash
 python3 -m http.server 8080
 ```
 
-Luego abrir en el navegador: `http://localhost:8080`
+**Option B (Node.js / npx):**
+```bash
+npx serve .
+```
+
+**Option C (PHP):**
+```bash
+php -S localhost:8080
+```
+
+### 3. Open in Browser
+
+Navigate to `http://localhost:8080` in any modern web browser (Chrome, Firefox, Safari, Edge).
 
 ---
 
-## Convenciones del codigo
+## 🛰️ NASA Scientific Data Sources
 
-- Los nombres de clases, funciones, variables y propiedades estan en español.
-- Se mantienen en ingles las APIs de las librerias (Tone.js, Globe.gl), los ids del HTML, las clases del CSS y las claves internas de cada pista (`fires`, `met`, `ocean`, `custom`).
+Satellite video visualizations are produced by the **NASA Scientific Visualization Studio (SVS)** and the **Earth Information Center (EIC)**:
 
----
-
-## Tecnologias usadas
-
-- [Globe.gl](https://globe.gl/) - Globo terraqueo 3D
-- [Three.js](https://threejs.org/) - Renderizado 3D
-- [Tone.js](https://tonejs.github.io/) - Sintesis de audio en el navegador
-- HTML5 Video API + Canvas 2D - Analisis de fotogramas
-- Tema visual: [Dracula Theme](https://draculatheme.com/)
+| Layer | Original NASA Dataset Title | SVS Identifier & Source Link |
+| :--- | :--- | :--- |
+| **Active Fires** | *Active Fires As Observed by VIIRS, 2024-Present* | [SVS Entry #5113](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005113/) |
+| **Wetlands Methane** | *Methane Emissions from Wetlands* | [SVS Entry #5054](https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005054/) |
+| **Ocean Temperature** | *Global Sea Surface Currents and Temperature* | [SVS Entry #3912](https://svs.gsfc.nasa.gov/vis/a000000/a003900/a003912/) |
+| **Atmospheric CO₂** | *DYAMOND Global Carbon Dioxide for Science On A Sphere* | [SVS Entry #5436](https://svs.gsfc.nasa.gov/vis/a000000/a005400/a005436/) |
+| **Surface Ozone (O₃)** | *Near Surface Ozone (O3)* | [SVS Entry #5152](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005152/) |
+| **Precipitation & Clouds** | *GEOS-FP Precipitation and Clouds* | [SVS Entry #5149](https://svs.gsfc.nasa.gov/vis/a000000/a005100/a005149/) |
 
 ---
 
-## Integrantes
-- Sam0Net
-- JLoayz
+## 💻 Tech Stack & Dependencies
 
+- **[Globe.gl](https://globe.gl/)**: 3D globe data visualization component.
+- **[Three.js](https://threejs.org/)**: WebGL 3D rendering pipeline and camera raycasting.
+- **[Tone.js](https://tonejs.github.io/)**: Interactive Web Audio API framework for polyphonic synthesis, sequencing, and effects.
+- **HTML5 Canvas 2D + Video Element**: Real-time pixel buffer sampling and matrix kernel extraction.
+- **[Dracula UI Palette](https://draculatheme.com/)**: High-contrast, accessibility-first visual dark theme.
 
-NASA Space Apps Challenge 2026
+---
+
+## 👥 Project Team & Contributions
+
+Developed for the **NASA Space Apps Challenge 2026**:
+
+* **Sam0Net**
+  * **Lead Architecture & Full-Stack Development**: Core software architecture, event coordination, and performance engineering.
+  * **3D WebGL & Coordinate Geometry**: 3D globe integration (`globeView.js`), raycasting, and equirectangular spherical coordinate transformations.
+  * **Real-Time Sonification Engine**: Mathematical parameter mapping, synthesizer modeling, and musical sequencer timing in Tone.js (`audioEngine.js`).
+  * **Accessibility & Localization**: WCAG compliance, screen reader integration, and English/Spanish bilingual framework (`i18n.js`).
+
+* **JLoayz**
+  * **Frontend Development & UI/UX**: User interface engineering, interactive control panel design, responsive layout, and Dracula styling.
+  * **Video Editing & Multimedia Production**: Video editing, official hackathon presentation video production, visual pacing, and demo showreels.
+  * **Sound Design & Musical Curation**: House subgenre selection, harmonic scale design, tempo calibration, and audio parameter tuning.
+  * **Project Documentation & Storytelling**: Challenge proposal formulation, scientific research synthesis, and presentation documentation.
+
+---
+
+<p align="center">
+  <strong>NASA Space Apps Challenge 2026 — Translating Earth Sight into Sound 🌎✨</strong>
+</p>
