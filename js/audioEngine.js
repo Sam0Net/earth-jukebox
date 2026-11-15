@@ -28,9 +28,9 @@ class MotorAudioHouse {
     this.obtenerFrame = null
     this.pistaActual = 'fires'
     this.luminanciaSuavizada = 90
-    this.corteBase = 1200
-    this.rangoCorte = 20
-    this.corteMaximo = 9000
+    this.corteBase = 950
+    this.rangoCorte = 14
+    this.corteMaximo = 4600
  
     this.escalas = {
       fires: ['C2', 'Eb2', 'F2', 'G2', 'Bb2', 'C3', 'Eb3', 'G3', 'Bb3', 'C4'],
@@ -81,22 +81,31 @@ class MotorAudioHouse {
  
     await Tone.start()
  
+    // Proteger Web Audio contra dropouts o jitter de renderizado mediante lookAhead generoso
+    if (Tone.context) {
+      Tone.context.lookAhead = 0.25
+    }
+
+    // Limitador final para evitar cualquier distorsión o clipeo digital
+    this.limitadorMaestro = new Tone.Limiter(-1).toDestination()
+
     this.compresorMaestro = new Tone.Compressor({
-      threshold: -12,
-      ratio: 4,
-      attack: 0.02,
-      release: 0.12
-    }).toDestination()
+      threshold: -14,
+      ratio: 3.5,
+      attack: 0.03,
+      release: 0.15
+    }).connect(this.limitadorMaestro)
  
+    // Filtro maestro cálido para evitar frecuencias chillosas
     this.filtroMaestro = new Tone.Filter({
-      frequency: 2200,
+      frequency: 1800,
       type: 'lowpass',
       rolloff: -12
     }).connect(this.compresorMaestro)
  
     this.reverberacion = new Tone.Reverb({
-      decay: 2.5,
-      wet: 0.15
+      decay: 2.2,
+      wet: 0.14
     }).connect(this.filtroMaestro)
     await this.reverberacion.generate()
  
@@ -109,12 +118,12 @@ class MotorAudioHouse {
  
     this.hiHatCerrado = new Tone.NoiseSynth({
       noise: { type: 'pink' },
-      envelope: { attack: 0.002, decay: 0.05, sustain: 0.0 }
+      envelope: { attack: 0.003, decay: 0.04, sustain: 0.0 }
     }).connect(this.filtroMaestro)
  
     this.hiHatAbierto = new Tone.NoiseSynth({
       noise: { type: 'pink' },
-      envelope: { attack: 0.002, decay: 0.2, sustain: 0.0 }
+      envelope: { attack: 0.003, decay: 0.18, sustain: 0.0 }
     }).connect(this.filtroMaestro)
  
     this.palmada = new Tone.NoiseSynth({
@@ -133,19 +142,21 @@ class MotorAudioHouse {
       noise: { type: 'pink' },
       envelope: { attack: 0.4, decay: 0.8, sustain: 0.1, release: 0.6 }
     }).connect(this.reverberacion)
-    this.oleaje.volume.value = -12
+    this.oleaje.volume.value = -16
  
+    // Sinte ácido optimizado: Q más cálido (2.4 en lugar de 4.0) y envolvente controlada
+    // para eliminar el tono chilloso estridente mientras mantiene el carácter analógico
     this.sinteAcido = new Tone.MonoSynth({
       oscillator: { type: 'sawtooth' },
-      filter: { Q: 4, type: 'lowpass', rolloff: -24 },
-      envelope: { attack: 0.01, decay: 0.18, sustain: 0.2, release: 0.15 },
+      filter: { Q: 1.8, type: 'lowpass', rolloff: -24 },
+      envelope: { attack: 0.015, decay: 0.22, sustain: 0.1, release: 0.18 },
       filterEnvelope: {
-        attack: 0.01,
-        decay: 0.22,
-        sustain: 0.1,
+        attack: 0.015,
+        decay: 0.24,
+        sustain: 0.08,
         release: 0.2,
-        baseFrequency: 70,
-        octaves: 4
+        baseFrequency: 65,
+        octaves: 2.6
       }
     }).connect(this.filtroMaestro)
  
@@ -170,7 +181,7 @@ class MotorAudioHouse {
  
     this.sinteMarimba = new Tone.PolySynth(Tone.Synth, {
       oscillator: { type: 'triangle' },
-      envelope: { attack: 0.008, decay: 0.22, sustain: 0.05, release: 0.3 }
+      envelope: { attack: 0.02, decay: 0.28, sustain: 0.08, release: 0.25 }
     }).connect(this.reverberacion)
  
     this.padOceano = new Tone.PolySynth(Tone.Synth, {
@@ -195,52 +206,52 @@ class MotorAudioHouse {
     this.pistaActual = tipoPista
  
     this.bombo.volume.value = 0
-    this.hiHatCerrado.volume.value = -12
-    this.hiHatAbierto.volume.value = -14
-    this.palmada.volume.value = -10
+    this.hiHatCerrado.volume.value = -16
+    this.hiHatAbierto.volume.value = -16
+    this.palmada.volume.value = -12
     this.percBongo.volume.value = -10
-    this.sinteAcido.volume.value = -8
+    this.sinteAcido.volume.value = -9
     this.bajoSub.volume.value = -8
     this.sinteAcordes.volume.value = -20
     this.sinteMarimba.volume.value = -8
     this.padOceano.volume.value = -18
-    this.arpegioCristal.volume.value = -14
+    this.arpegioCristal.volume.value = -16
  
     if (tipoPista === 'fires') {
       this.bpmActual = 128
-      this.corteBase = 1400
-      this.rangoCorte = 22
-      this.corteMaximo = 9000
-      this.bombo.volume.value = 2
-      this.hiHatCerrado.volume.value = -14
-      this.hiHatAbierto.volume.value = -13
-      this.palmada.volume.value = -8
-      this.percBongo.volume.value = -11
-      this.sinteAcido.volume.value = -6
-      this.sinteAcordes.volume.value = -19
+      this.corteBase = 950
+      this.rangoCorte = 14
+      this.corteMaximo = 3400
+      this.bombo.volume.value = 0
+      this.hiHatCerrado.volume.value = -18
+      this.hiHatAbierto.volume.value = -16
+      this.palmada.volume.value = -11
+      this.percBongo.volume.value = -12
+      this.sinteAcido.volume.value = -11
+      this.sinteAcordes.volume.value = -20
     } else if (tipoPista === 'met') {
       this.bpmActual = 116
       this.corteBase = 350
-      this.rangoCorte = 22
-      this.corteMaximo = 7000
+      this.rangoCorte = 14
+      this.corteMaximo = 3000
       this.bombo.volume.value = 0
-      this.hiHatCerrado.volume.value = -10
-      this.palmada.volume.value = -8
-      this.percBongo.volume.value = -3
-      this.sinteMarimba.volume.value = -2
+      this.hiHatCerrado.volume.value = -16
+      this.palmada.volume.value = -10
+      this.percBongo.volume.value = -6
+      this.sinteMarimba.volume.value = -10
     } else {
       this.bpmActual = 122
-      this.corteBase = 800
-      this.rangoCorte = 14
-      this.corteMaximo = 5500
+      this.corteBase = 700
+      this.rangoCorte = 10
+      this.corteMaximo = 2800
       this.bombo.volume.value = 0
-      this.hiHatCerrado.volume.value = -19
-      this.hiHatAbierto.volume.value = -17
-      this.palmada.volume.value = -16
-      this.bajoSub.volume.value = -7
-      this.padOceano.volume.value = -16
-      this.arpegioCristal.volume.value = -13
-      this.oleaje.volume.value = -14
+      this.hiHatCerrado.volume.value = -20
+      this.hiHatAbierto.volume.value = -18
+      this.palmada.volume.value = -18
+      this.bajoSub.volume.value = -8
+      this.padOceano.volume.value = -18
+      this.arpegioCristal.volume.value = -16
+      this.oleaje.volume.value = -16
     }
   }
  
@@ -268,7 +279,8 @@ class MotorAudioHouse {
  
     this.luminanciaSuavizada += (lum - this.luminanciaSuavizada) * 0.2
     const corte = Math.min(this.corteBase + this.luminanciaSuavizada * this.rangoCorte, this.corteMaximo)
-    this.filtroMaestro.frequency.rampTo(corte, 0.1)
+    // Sincronizar con el timestamp exacto del audio thread
+    this.filtroMaestro.frequency.rampTo(corte, 0.08, tiempo)
  
     const paso = this.contadorPasos
     const s = paso % 16
@@ -301,33 +313,35 @@ class MotorAudioHouse {
     }
  
     if (!intro && (s === 4 || s === 12)) {
-      this.palmada.triggerAttackRelease('16n', tiempo, 0.85)
+      this.palmada.triggerAttackRelease('16n', tiempo, 0.65)
     }
  
     if (compasRelleno && s >= 8 && s % 2 === 0) {
-      this.palmada.triggerAttackRelease('32n', tiempo, this.limitar(0.3 + (s - 8) * 0.1))
+      this.palmada.triggerAttackRelease('32n', tiempo, this.limitar(0.25 + (s - 8) * 0.08))
     }
  
     if (s % 4 === 2) {
-      this.hiHatAbierto.triggerAttackRelease('16n', tiempo, 0.6)
+      this.hiHatAbierto.triggerAttackRelease('16n', tiempo, 0.45)
     } else if (s % 2 === 1) {
       if (Math.random() < 0.55 + densidad * 0.3) {
-        this.hiHatCerrado.triggerAttackRelease('32n', tiempo, this.limitar(0.25 + Math.random() * 0.3 + r / 1200))
+        this.hiHatCerrado.triggerAttackRelease('32n', tiempo, this.limitar(0.18 + Math.random() * 0.18 + r / 2000))
       }
     } else if (s % 4 === 0 && !intro) {
-      this.hiHatCerrado.triggerAttackRelease('32n', tiempo, 0.3)
+      this.hiHatCerrado.triggerAttackRelease('32n', tiempo, 0.22)
     }
  
     if (!intro) {
       const patronPerc = this.percusionFuegos[(indiceCompas + Math.floor(b / 90)) % this.percusionFuegos.length]
       const notaPerc = patronPerc[s]
       if (notaPerc && Math.random() < densidad) {
-        this.percBongo.triggerAttackRelease(notaPerc, '16n', tiempo, 0.55 + Math.random() * 0.2)
+        this.percBongo.triggerAttackRelease(notaPerc, '16n', tiempo, 0.5 + Math.random() * 0.18)
       }
     }
  
+    // Envolvente de filtro estable y calibrada, sin mutaciones bruscas por compás
     if (s === 0) {
-      this.sinteAcido.filterEnvelope.octaves = 2 + (g / 255) * 3
+      const freqBase = 58 + Math.round((g / 255) * 16)
+      this.sinteAcido.filterEnvelope.baseFrequency = freqBase
     }
  
     const patron = this.patronesAcido[(indiceCompas + Math.floor(r / 64)) % this.patronesAcido.length]
@@ -337,13 +351,13 @@ class MotorAudioHouse {
       if (acento || Math.random() < densidad) {
         const nota = this.transponer(raiz, semitonos)
         const dur = acento ? '8n' : '16n'
-        const vel = acento ? 0.95 : this.limitar(0.5 + Math.random() * 0.25)
+        const vel = acento ? 0.82 : this.limitar(0.42 + Math.random() * 0.2)
         this.sinteAcido.triggerAttackRelease(nota, dur, tiempo, vel)
       }
     }
  
     if (!intro && (s === 3 || s === 10 || (frase >= 5 && s === 6))) {
-      this.sinteAcordes.triggerAttackRelease(acorde, '16n', tiempo, this.limitar(0.3 + g / 800))
+      this.sinteAcordes.triggerAttackRelease(acorde, '16n', tiempo, this.limitar(0.24 + g / 1000))
     }
   }
  
@@ -355,19 +369,19 @@ class MotorAudioHouse {
     const intro = frase === 0 && indiceCompas < 8
  
     if (s % 4 === 0 && !pausa) {
-      this.bombo.triggerAttackRelease('D1', '8n', tiempo, 0.9)
+      this.bombo.triggerAttackRelease('D1', '8n', tiempo, 0.85)
     }
  
     if (!intro && !pausa && (s === 4 || s === 12)) {
-      this.palmada.triggerAttackRelease('16n', tiempo, 0.45)
+      this.palmada.triggerAttackRelease('16n', tiempo, 0.38)
     }
  
     if (s % 4 === 2) {
-      this.hiHatAbierto.triggerAttackRelease('16n', tiempo, 0.5)
+      this.hiHatAbierto.triggerAttackRelease('16n', tiempo, 0.38)
     }
-    const velHat = [0.15, 0.3, 0.2, 0.35][s % 4]
+    const velHat = [0.12, 0.22, 0.16, 0.26][s % 4]
     if (s % 4 !== 2 && Math.random() < 0.5 + densidad * 0.4) {
-      this.hiHatCerrado.triggerAttackRelease('32n', tiempo, this.limitar(velHat + Math.random() * 0.15))
+      this.hiHatCerrado.triggerAttackRelease('32n', tiempo, this.limitar(velHat + Math.random() * 0.12))
     }
  
     if (s === 0 && indiceCompas % 2 === 0) {
@@ -375,7 +389,7 @@ class MotorAudioHouse {
     }
  
     if (s === 0 && indiceCompas % 4 === 0) {
-      this.oleaje.triggerAttackRelease('1m', tiempo, 0.4)
+      this.oleaje.triggerAttackRelease('1m', tiempo, 0.35)
     }
  
     if (!pausa) {
@@ -383,7 +397,7 @@ class MotorAudioHouse {
       const semitonosBajo = patronBajo[s]
       if (semitonosBajo !== null && semitonosBajo !== undefined) {
         const nota = this.transponer(raiz, semitonosBajo)
-        this.bajoSub.triggerAttackRelease(nota, '8n', tiempo, s === 0 ? 0.9 : 0.65)
+        this.bajoSub.triggerAttackRelease(nota, '8n', tiempo, s === 0 ? 0.85 : 0.6)
       }
     }
  
@@ -392,7 +406,7 @@ class MotorAudioHouse {
       const indice = patronArpegio[s]
       if (indice !== null && indice !== undefined && Math.random() < 0.55 + densidad * 0.4) {
         const nota = this.transponer(acorde[indice % acorde.length], 12)
-        const vel = this.limitar(0.3 + (b / 255) * 0.35 + Math.random() * 0.1)
+        const vel = this.limitar(0.22 + (b / 255) * 0.22 + Math.random() * 0.08)
         this.arpegioCristal.triggerAttackRelease(nota, '16n', tiempo, vel)
       }
     }
@@ -405,19 +419,19 @@ class MotorAudioHouse {
     const indiceMax = escalaActual.length - 1
  
     if (s8 % 8 === 0 || s8 % 16 === 10) {
-      this.bombo.triggerAttackRelease('F1', '8n', tiempo, 0.85)
+      this.bombo.triggerAttackRelease('F1', '8n', tiempo, 0.8)
     }
     if (s8 % 4 === 1 || s8 % 8 === 6) {
       const tonoBongo = s8 % 2 === 0 ? 'C3' : 'G2'
-      this.percBongo.triggerAttackRelease(tonoBongo, '16n', tiempo, 0.75)
+      this.percBongo.triggerAttackRelease(tonoBongo, '16n', tiempo, 0.65)
     }
     if (s8 % 2 === 1) {
-      this.hiHatCerrado.triggerAttackRelease('32n', tiempo, 0.4)
+      this.hiHatCerrado.triggerAttackRelease('32n', tiempo, 0.28)
     }
     const indiceG = Math.min(Math.floor((g / 255) * indiceMax), indiceMax)
     const notaMarimba = escalaActual[indiceG]
     if (s8 % 2 === 0 || lum > 80) {
-      this.sinteMarimba.triggerAttackRelease(notaMarimba, '8n', tiempo + 0.04, this.limitar(0.6 + lum / 400))
+      this.sinteMarimba.triggerAttackRelease(notaMarimba, '8n', tiempo, this.limitar(0.38 + lum / 700))
     }
   }
  

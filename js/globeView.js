@@ -1,5 +1,8 @@
 var instanciaGlobo = null
 var anillosActuales = []
+var temporizadorOnda = null
+
+const colorOnda = (t) => `rgba(139, 233, 253, ${Math.max(0, 1 - t).toFixed(2)})`
 
 export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
   var contenedor = document.getElementById(idContenedor)
@@ -16,7 +19,7 @@ export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
     .showAtmosphere(true)
     .atmosphereColor('#6272a4')
     .atmosphereAltitude(0.15)
-    .ringColor(() => (t) => `rgba(139, 233, 253, ${Math.max(0, 1 - t)})`)
+    .ringColor(() => colorOnda)
     .ringMaxRadius('radioMax')
     .ringPropagationSpeed('velocidad')
     .ringRepeatPeriod('repeticion')
@@ -31,11 +34,18 @@ export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
       }
     })
 
+  // Optimización de Three.js Renderer: limitar pixel ratio para mantener 60 FPS estables
+  var renderer = instanciaGlobo.renderer()
+  if (renderer) {
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75))
+    renderer.powerPreference = 'high-performance'
+  }
+
   var controles = instanciaGlobo.controls()
   controles.autoRotate = true
   controles.autoRotateSpeed = 0.35
   controles.enableDamping = true
-  controles.dampingFactor = 0.05
+  controles.dampingFactor = 0.08
 
   instanciaGlobo.pointOfView({ lat: 20, lng: 0, altitude: 2.2 }, 0)
 
@@ -56,6 +66,11 @@ export function iniciarGlobo(idContenedor, alSeleccionarUbicacion) {
 export function dispararOnda(lat, lng) {
   if (!instanciaGlobo) return
 
+  if (temporizadorOnda) {
+    clearTimeout(temporizadorOnda)
+    temporizadorOnda = null
+  }
+
   var nuevoAnillo = {
     lat: lat,
     lng: lng,
@@ -67,10 +82,13 @@ export function dispararOnda(lat, lng) {
   anillosActuales = [nuevoAnillo]
   instanciaGlobo.ringsData(anillosActuales)
 
-  setTimeout(() => {
+  temporizadorOnda = setTimeout(() => {
     anillosActuales = []
-    instanciaGlobo.ringsData([])
-  }, 4200)
+    if (instanciaGlobo) {
+      instanciaGlobo.ringsData([])
+    }
+    temporizadorOnda = null
+  }, 4000)
 }
 
 export function enfocarUbicacion(lat, lng, altitud = 1.8) {
