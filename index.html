@@ -107,6 +107,203 @@
 
   </aside>
 
+  <!-- Botón superior derecho: Accesibilidad y navegación rápida -->
+  <div class="top-nav-container">
+    <button id="quickNavA11yBtn" class="top-nav-btn" type="button" aria-expanded="false" aria-controls="quickNavA11yPanel" aria-label="Abrir accesibilidad y navegación rápida">
+      <svg class="top-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+      </svg>
+      <span class="top-nav-label">Accesibilidad y navegación rápida</span>
+    </button>
+
+    <!-- Panel desplegable de accesibilidad y navegación rápida -->
+    <section id="quickNavA11yPanel" class="quick-nav-panel glass-panel" hidden aria-label="Panel de accesibilidad y navegación rápida">
+      <div class="panel-header">
+        <div class="panel-title-group">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+          </svg>
+          <h2 class="panel-title">Navegación &amp; Accesibilidad</h2>
+        </div>
+        <button id="closeQuickNavBtn" class="panel-close-btn" type="button" aria-label="Cerrar panel de accesibilidad">&times;</button>
+      </div>
+
+      <div class="panel-content">
+        <!-- Navegación rápida por coordenadas predefinidas -->
+        <div class="panel-group">
+          <h3 class="panel-subtitle">Navegación rápida (Puntos Clave)</h3>
+          <p class="panel-hint">Selecciona una región para viajar y escuchar sus datos sin necesidad de apuntar con el cursor:</p>
+          
+          <div class="preset-locations-list" role="list">
+            <button class="preset-loc-btn" type="button" data-track="fires" data-lat="-3.46" data-lng="-62.21" data-name="Amazonía, Brasil">
+              <span class="card-dot dot-fire" aria-hidden="true"></span>
+              <div class="preset-text">
+                <span class="preset-title">Amazonía, Brasil</span>
+                <span class="preset-meta">Incendios &bull; -3.5&deg;, -62.2&deg; (128 BPM)</span>
+              </div>
+            </button>
+
+            <button class="preset-loc-btn" type="button" data-track="fires" data-lat="60.0" data-lng="100.0" data-name="Taiga Siberiana">
+              <span class="card-dot dot-fire" aria-hidden="true"></span>
+              <div class="preset-text">
+                <span class="preset-title">Taiga Siberiana</span>
+                <span class="preset-meta">Incendios &bull; 60.0&deg;, 100.0&deg; (128 BPM)</span>
+              </div>
+            </button>
+
+            <button class="preset-loc-btn" type="button" data-track="met" data-lat="-0.22" data-lng="21.75" data-name="Cuenca del Congo">
+              <span class="card-dot dot-vegetation" aria-hidden="true"></span>
+              <div class="preset-text">
+                <span class="preset-title">Cuenca del Congo</span>
+                <span class="preset-meta">Metano &amp; Humedales &bull; -0.2&deg;, 21.8&deg; (116 BPM)</span>
+              </div>
+            </button>
+
+            <button class="preset-loc-btn" type="button" data-track="met" data-lat="-16.5" data-lng="-56.5" data-name="Pantanal Sudamericano">
+              <span class="card-dot dot-vegetation" aria-hidden="true"></span>
+              <div class="preset-text">
+                <span class="preset-title">Pantanal Sudamericano</span>
+                <span class="preset-meta">Humedal &bull; -16.5&deg;, -56.5&deg; (116 BPM)</span>
+              </div>
+            </button>
+
+            <button class="preset-loc-btn" type="button" data-track="ocean" data-lat="32.0" data-lng="-64.0" data-name="Corriente del Golfo">
+              <span class="card-dot dot-ocean" aria-hidden="true"></span>
+              <div class="preset-text">
+                <span class="preset-title">Corriente del Golfo</span>
+                <span class="preset-meta">Océanos &bull; 32.0&deg;, -64.0&deg; (122 BPM)</span>
+              </div>
+            </button>
+
+            <button class="preset-loc-btn" type="button" data-track="ocean" data-lat="-18.28" data-lng="147.69" data-name="Gran Barrera de Coral">
+              <span class="card-dot dot-ocean" aria-hidden="true"></span>
+              <div class="preset-text">
+                <span class="preset-title">Gran Barrera de Coral</span>
+                <span class="preset-meta">Océano Pacífico &bull; -18.3&deg;, 147.7&deg; (122 BPM)</span>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Controles de accesibilidad -->
+        <div class="panel-group">
+          <h3 class="panel-subtitle">Ajustes de accesibilidad</h3>
+          <div class="a11y-action-list">
+            <button id="toggleRotationBtn" class="a11y-control-btn" type="button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+              </svg>
+              <span id="rotationBtnText">Pausar rotación del globo</span>
+            </button>
+
+            <button id="openProjectInfoBtn" class="a11y-control-btn" type="button">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              <span>Ver información del proyecto</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Atajos de teclado -->
+        <div class="panel-group">
+          <h3 class="panel-subtitle">Atajos de teclado</h3>
+          <ul class="keyboard-shortcuts-list">
+            <li><kbd>Espacio</kbd> <span>Pausar / Reproducir</span></li>
+            <li><kbd>M</kbd> <span>Silenciar / Activar sonido</span></li>
+            <li><kbd>1</kbd> / <kbd>2</kbd> / <kbd>3</kbd> <span>Capas: Fuego, Metano, Océano</span></li>
+            <li><kbd>Esc</kbd> <span>Cerrar paneles</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Modal Informativo: ¿Cómo funciona The Earth Information Jukebox? -->
+  <div id="projectInfoModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" style="display: flex;">
+    <div class="modal-card-dialog">
+      <button id="closeModalCrossBtn" class="modal-close-icon-btn" type="button" aria-label="Cerrar modal de información">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-header-tag">
+        <span class="modal-pill-badge">RETO NASA SPACE APPS CHALLENGE</span>
+      </div>
+
+      <h2 id="modalTitle" class="modal-main-title">&iquest;C&oacute;mo funciona The Earth Information Jukebox?</h2>
+
+      <p class="modal-intro-text">
+        El Earth Information Center (EIC) de la NASA produce visualizaciones extraordinarias del planeta. Sin embargo, presentarlas &uacute;nicamente de forma visual limita el acceso a personas ciegas y con baja visi&oacute;n. Esta plataforma traduce p&iacute;xeles satelitales en sonido para ofrecer una experiencia multisensorial y accesible.
+      </p>
+
+      <div class="modal-cards-grid">
+        <div class="feature-info-card">
+          <div class="card-top-row">
+            <span class="card-dot dot-fire" aria-hidden="true"></span>
+            <h3 class="feature-title">Espectro C&aacute;lido / Incendios</h3>
+          </div>
+          <p class="feature-description">
+            Tonos rojos y amarillos (fuego, anomal&iacute;as t&eacute;rmicas MODIS/VIIRS) modulan l&iacute;neas de bajo &aacute;cido TB-303 y percusiones en&eacute;rgicas a 128 BPM.
+          </p>
+        </div>
+
+        <div class="feature-info-card">
+          <div class="card-top-row">
+            <span class="card-dot dot-vegetation" aria-hidden="true"></span>
+            <h3 class="feature-title">Gases &amp; Vegetaci&oacute;n</h3>
+          </div>
+          <p class="feature-description">
+            Concentraciones de metano (AIRS/DYAMOND) y dosel forestal (GEDI) activan marimbas mel&oacute;dicas y ritmos afro-deep con s&iacute;ncopas org&aacute;nicas a 116 BPM.
+          </p>
+        </div>
+
+        <div class="feature-info-card">
+          <div class="card-top-row">
+            <span class="card-dot dot-ocean" aria-hidden="true"></span>
+            <h3 class="feature-title">Oc&eacute;anos &amp; Corrientes</h3>
+          </div>
+          <p class="feature-description">
+            Temperaturas marinas y corrientes (ECCO2/GHRSST) se expresan mediante pads progresivos envolventes y arpegios cristalinos continuos a 122 BPM.
+          </p>
+        </div>
+
+        <div class="feature-info-card">
+          <div class="card-top-row">
+            <span class="card-headphone-icon" aria-hidden="true">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+                <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+              </svg>
+            </span>
+            <h3 class="feature-title">Audio Espacial Est&eacute;reo</h3>
+          </div>
+          <p class="feature-description">
+            La longitud geogr&aacute;fica orienta el paneo est&eacute;reo: fen&oacute;menos en Am&eacute;rica suenan a la izquierda y en Asia/Ocean&iacute;a a la derecha, ubicando el dato en el espacio.
+          </p>
+        </div>
+      </div>
+
+      <div class="modal-dialog-footer">
+        <a href="https://www.spaceappschallenge.org/" target="_blank" rel="noopener noreferrer" class="modal-link-btn">
+          Ver reto en Space Apps Challenge <span aria-hidden="true">&nearr;</span>
+        </a>
+        <button id="closeModalBottomBtn" class="modal-primary-action-btn" type="button">
+          Entendido, explorar la Rockola
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anunciador dinámico para lectores de pantalla -->
+  <div id="a11yAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
