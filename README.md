@@ -1,4 +1,4 @@
-# The Earth Information Jukebox
+<h1 align="center">The Earth Information Jukebox</h1>
 
 <p align="center">
   <em>"At least 2.2 billion people have a near or distance vision impairment"</em><br>
